@@ -6,6 +6,7 @@ import { BriefControls, BriefState } from "@/components/brief-controls";
 import { Poster } from "@/components/poster";
 import { Comparison } from "@/components/comparison";
 import { Drawer } from "@/components/drawer";
+import { AgentPanel } from "@/components/chat/agent-panel";
 import { LineupReceipt, BookedSlot } from "@/lib/solver";
 import { AlertCircle, Sparkles } from "lucide-react";
 
@@ -97,11 +98,15 @@ export default function Home() {
         )}
 
         {/* S1: Promoter Brief Parameters */}
-        <section>
+        <section className="space-y-4">
           <BriefControls
             brief={brief}
             onChange={(updated) => setBrief((prev) => ({ ...prev, ...updated }))}
             onSolve={executeSolve}
+            isLoading={isLoading}
+          />
+          <AgentPanel
+            onApplyPatch={(patch) => setBrief((prev) => ({ ...prev, ...patch }))}
             isLoading={isLoading}
           />
         </section>
