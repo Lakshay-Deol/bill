@@ -70,6 +70,7 @@ export function BriefControls({
             <button
               key={p.name}
               type="button"
+              suppressHydrationWarning
               disabled={isLoading}
               onClick={() => {
                 if (onSelectPreset) {
@@ -94,6 +95,7 @@ export function BriefControls({
           </label>
           <input
             type="text"
+            suppressHydrationWarning
             value={brief.market}
             onChange={(e) => onChange({ market: e.target.value })}
             className="w-full rounded-xl border border-zinc-800 bg-zinc-950/80 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-violet-500 transition"
@@ -156,6 +158,7 @@ export function BriefControls({
               <button
                 key={cnt}
                 type="button"
+                suppressHydrationWarning
                 onClick={() => onChange({ actCount: cnt })}
                 className={`flex-1 py-1 text-xs rounded-lg border font-medium transition ${
                   brief.actCount === cnt
@@ -174,6 +177,7 @@ export function BriefControls({
         <label className="flex items-center gap-2 cursor-pointer text-xs text-zinc-300">
           <input
             type="checkbox"
+            suppressHydrationWarning
             checked={brief.requireLocal}
             onChange={(e) => onChange({ requireLocal: e.target.checked })}
             className="rounded border-zinc-700 bg-zinc-900 text-violet-600 focus:ring-violet-500 w-4 h-4"
@@ -185,6 +189,7 @@ export function BriefControls({
           type="button"
           onClick={onSolve}
           disabled={isLoading}
+          suppressHydrationWarning
           className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-violet-500/25 hover:from-violet-500 hover:to-indigo-500 transition disabled:opacity-50"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />

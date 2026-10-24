@@ -52,6 +52,7 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
       <form onSubmit={handleSubmit} className="relative">
         <input
           type="text"
+          suppressHydrationWarning
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="e.g. 'Cut budget to $180k and add an Austin local act'..."
@@ -59,6 +60,7 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
         />
         <button
           type="submit"
+          suppressHydrationWarning
           disabled={!prompt.trim() || isLoading}
           className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-violet-400 hover:text-white hover:bg-violet-600/30 transition disabled:opacity-30"
         >
@@ -74,6 +76,7 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
           <button
             key={q}
             type="button"
+            suppressHydrationWarning
             onClick={() => handleQuickClick(q)}
             className="rounded-lg border border-zinc-800 bg-zinc-950/40 px-2.5 py-1 text-[11px] text-zinc-400 hover:border-violet-500/40 hover:text-zinc-200 transition"
           >
