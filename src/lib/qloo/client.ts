@@ -180,25 +180,41 @@ export async function qlooGet<T>(
     }
   }
 
-  let res: Response;
-  try {
-    res = await fetch(url.toString(), {
-      method: "GET",
-      headers: {
-        "X-Api-Key": env.QLOO_API_KEY ?? "",
-        Accept: "application/json",
-      },
-      signal: AbortSignal.timeout(15_000),
-    });
-  } catch (err: unknown) {
-    if (err instanceof Error && err.name === "TimeoutError") {
-      throw new QlooTimeoutError(path);
+  let res: Response | null = null;
+  let lastError: unknown = null;
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      res = await fetch(url.toString(), {
+        method: "GET",
+        headers: {
+          "X-Api-Key": env.QLOO_API_KEY ?? "",
+          Accept: "application/json",
+        },
+        signal: AbortSignal.timeout(attempt === 1 ? 15_000 : 20_000),
+      });
+      break;
+    } catch (err: unknown) {
+      lastError = err;
+      if (attempt === 1) {
+        // Short pause before retry
+        await new Promise((r) => setTimeout(r, 1000));
+        continue;
+      }
+      if (err instanceof Error && err.name === "TimeoutError") {
+        throw new QlooTimeoutError(path);
+      }
+      throw new QlooError(
+        err instanceof Error ? err.message : "Network fetch failed",
+        path
+      );
     }
-    throw new QlooError(
-      err instanceof Error ? err.message : "Network fetch failed",
-      path
-    );
   }
+
+  if (!res) {
+    throw new QlooError("No response received from Qloo API", path);
+  }
+
 
   if (!res.ok) {
     const rawText = await res.text().catch(() => "");
