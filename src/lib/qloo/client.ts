@@ -250,8 +250,13 @@ export async function resolveArtistByName(name: string) {
     throw new QlooEmptyResultError(`/search?query=${encodeURIComponent(name)}`);
   }
 
+  const normalizedPrimary = {
+    ...primary,
+    id: primary.entity_id ?? primary.id ?? "",
+  };
+
   return {
-    artist: primary,
+    artist: normalizedPrimary,
     disambiguationList: candidates.slice(1),
   };
 }
@@ -275,6 +280,14 @@ export async function getArtistNeighbors(
     QlooInsightsResponseSchema
   );
 
-  const neighbors = data.entities ?? data.results ?? [];
-  return neighbors;
+  const rawResults = data.results;
+  const rawList = Array.isArray(rawResults)
+    ? rawResults
+    : rawResults?.entities ?? data.entities ?? [];
+
+  return rawList.map((n) => ({
+    ...n,
+    id: n.entity_id ?? n.id ?? "",
+  }));
 }
+
