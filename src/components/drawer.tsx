@@ -40,7 +40,7 @@ export function Drawer({ slot, onClose, onOverrideFee }: DrawerProps) {
             <span>Marginal Unique Demand</span>
           </div>
           <div className="text-3xl font-black text-emerald-300">
-            +{slot.marginalUnique.toLocaleString()} fans
+            +{slot.marginalUnique.toLocaleString("en-US")} fans
           </div>
           <p className="text-[11px] text-zinc-400">
             Net incremental attendees after penalizing taste overlap with previously booked acts.
@@ -84,7 +84,7 @@ export function Drawer({ slot, onClose, onOverrideFee }: DrawerProps) {
               <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Estimated Fee
             </span>
             <span className="text-xs font-mono font-bold text-zinc-100">
-              est. ${slot.fee.toLocaleString()}
+              est. ${slot.fee.toLocaleString("en-US")}
             </span>
           </div>
           <button

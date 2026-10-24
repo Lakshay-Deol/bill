@@ -77,7 +77,7 @@ export function Poster({ stages, onSelectSlot, selectedSlotId, onOverrideFee }: 
                       <div className="text-right flex flex-col items-end">
                         <div className="flex items-center gap-1 text-xs font-semibold text-zinc-200">
                           <span className="text-[10px] uppercase text-zinc-500 font-medium">est.</span>
-                          <span>${slot.fee.toLocaleString()}</span>
+                          <span>${slot.fee.toLocaleString("en-US")}</span>
                           <button
                             type="button"
                             title="Override estimated fee"
@@ -103,7 +103,7 @@ export function Poster({ stages, onSelectSlot, selectedSlotId, onOverrideFee }: 
                     <div className="mt-3 pt-2.5 border-t border-zinc-800/60 flex items-center justify-between text-xs">
                       <div className="flex items-center gap-1 text-emerald-400 font-medium">
                         <Sparkles className="w-3.5 h-3.5" />
-                        <span>+{slot.marginalUnique.toLocaleString()} unique fans</span>
+                        <span>+{slot.marginalUnique.toLocaleString("en-US")} unique fans</span>
                       </div>
                       <div className="text-[11px] text-zinc-400">
                         {slot.closestActOverlap > 0 ? (

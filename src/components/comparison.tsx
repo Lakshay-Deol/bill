@@ -34,7 +34,7 @@ export function Comparison({ receipt }: ComparisonProps) {
               Demand Uplift
             </div>
             <div className="text-base font-black text-emerald-300">
-              +{demandLift.toLocaleString()} fans ({receipt.upliftPercent ?? 0}%)
+              +{demandLift.toLocaleString("en-US")} fans ({receipt.upliftPercent ?? 0}%)
             </div>
           </div>
         </div>
@@ -48,10 +48,10 @@ export function Comparison({ receipt }: ComparisonProps) {
           </div>
           <div className="flex items-baseline justify-between">
             <span className="text-lg font-bold text-zinc-100">
-              {receipt.modeledUniqueDemand.toLocaleString()}
+              {receipt.modeledUniqueDemand.toLocaleString("en-US")}
             </span>
             <span className="text-xs text-zinc-500 line-through">
-              {naive.modeledUniqueDemand.toLocaleString()}
+              {naive.modeledUniqueDemand.toLocaleString("en-US")}
             </span>
           </div>
           <div className="text-[10px] text-emerald-400 mt-1 font-medium">
@@ -82,14 +82,14 @@ export function Comparison({ receipt }: ComparisonProps) {
           </div>
           <div className="flex items-baseline justify-between">
             <span className="text-lg font-bold text-zinc-100">
-              ${receipt.totalSpent.toLocaleString()}
+              ${receipt.totalSpent.toLocaleString("en-US")}
             </span>
             <span className="text-xs text-zinc-500">
-              ${naive.totalSpent.toLocaleString()} naive
+              ${naive.totalSpent.toLocaleString("en-US")} naive
             </span>
           </div>
           <div className="text-[10px] text-zinc-400 mt-1">
-            Remaining: ${receipt.remainingBudget.toLocaleString()}
+            Remaining: ${receipt.remainingBudget.toLocaleString("en-US")}
           </div>
         </div>
       </div>
@@ -112,7 +112,7 @@ export function Comparison({ receipt }: ComparisonProps) {
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-zinc-200">{optAct.name}</span>
                       <span className="text-[11px] text-zinc-400 font-mono">
-                        est. ${optAct.fee.toLocaleString()}
+                        est. ${optAct.fee.toLocaleString("en-US")}
                       </span>
                     </div>
                   ) : (
@@ -124,7 +124,7 @@ export function Comparison({ receipt }: ComparisonProps) {
                     <div className="flex items-center justify-between">
                       <span className="text-zinc-400">{naiveAct.name}</span>
                       <span className="text-[11px] text-zinc-500 font-mono">
-                        est. ${naiveAct.fee.toLocaleString()}
+                        est. ${naiveAct.fee.toLocaleString("en-US")}
                       </span>
                     </div>
                   ) : (

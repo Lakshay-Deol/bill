@@ -108,7 +108,7 @@ export function BriefControls({
               <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Talent Budget
             </label>
             <span className="text-xs font-bold text-emerald-400">
-              ${brief.budget.toLocaleString()}
+              ${brief.budget.toLocaleString("en-US")}
             </span>
           </div>
           <input
@@ -129,7 +129,7 @@ export function BriefControls({
               <Users className="w-3.5 h-3.5 text-indigo-400" /> Cap Size
             </label>
             <span className="text-xs font-bold text-indigo-400">
-              {brief.capacity.toLocaleString()} fans
+              {brief.capacity.toLocaleString("en-US")} fans
             </span>
           </div>
           <input
