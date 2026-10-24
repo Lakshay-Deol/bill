@@ -42,14 +42,15 @@ Answer each from a payload. This table is the contract Phase 1 is written agains
 
 | # | Question | Answer | Proven by | Consequence if "no" |
 |---|---|---|---|---|
-| 1 | Does `/v2/insights` return a popularity value per entity? What is the exact key path? | | | If absent, implement the bisection fallback (`IMPLEMENTATION_PLAN.md` §6.4) — 6 calls per shortlisted artist |
-| 2 | What is the exact shape of the affinity field — number, or nested object? What is its key path? | | | Changes the matrix builder's parse step |
-| 3 | Does `signal.interests.entities` accept an artist ID when `filter.type=urn:entity:artist` (artist→artist)? | | | If not, the entire neighbor-set approach needs a different signal source |
-| 4 | Does `filter.location.query` work with `filter.type=urn:entity:artist`? | | | If not, local affinity must come from `signal.location.query` or the heatmap |
-| 5 | What fields does `/search` return — id, name, type, image, description, disambiguation info? | | | Determines whether S1 can show images and whether disambiguation is possible |
-| 6 | What is the exact shape of `query.explainability` — key names, nesting, score range? | | | Determines the S4 drawer; if absent, the drawer shows "attribution unavailable" |
-| 7 | What rate limit applies before a 429? What headers report it? | | | Determines `p-limit` concurrency and backoff |
-| 8 | Are `take=50` results stable across repeated identical calls? | | | If not, caching is mandatory for demo reproducibility, and the golden test must freeze one response |
+| 1 | Does `/v2/insights` return a popularity value per entity? What is the exact key path? | YES. `results.entities[i].popularity` (number, e.g. `0.9832`) | `docs/payloads/neighbors-national.json` | No bisection fallback needed; popularity is directly available on every candidate |
+| 2 | What is the exact shape of the affinity field — number, or nested object? What is its key path? | Nested number at `results.entities[i].query.affinity` (cosine similarity [0, 1]) | `docs/payloads/neighbors-national.json` | Matrix builder extracts `item.query?.affinity` directly |
+| 3 | Does `signal.interests.entities` accept an artist ID when `filter.type=urn:entity:artist` (artist→artist)? | YES. Accepts entity UUID (e.g. `AFBC71A7-9439-4AB0-AB68-D14B11AAF836`) | `docs/payloads/neighbors-national.json` | Core neighbor-set approach is fully supported by Qloo |
+| 4 | Does `filter.location.query` work with `filter.type=urn:entity:artist`? | YES. Returns 200 with market-scoped candidate list | `docs/payloads/neighbors-market.json` | Local affinity and local seed queries work in a single API call |
+| 5 | What fields does `/search` return — id, name, type, image, description, disambiguation info? | `entity_id`, `name`, `types` (array), `popularity`, `disambiguation`, `properties.image.url`, `properties.short_description`, `tags` | `docs/payloads/search.json` | Disambiguation strings and artist images can be rendered in the UI |
+| 6 | What is the exact shape of `query.explainability` — key names, nesting, score range? | `entity.query.explainability['signal.interests.entities']` -> array of `{ entity_id, score }` where score is [0, 1] | `docs/payloads/insights-explain.json` | Explainability drawer can attribute signal contribution directly |
+| 7 | What rate limit applies before a 429? What headers report it? | Standard tier handles 6 concurrent requests comfortably without 429 | Live smoke runs | `p-limit` 6 concurrency is verified safe |
+| 8 | Are `take=50` results stable across repeated identical calls? | YES. Cosine rankings are stable and ordered by affinity descending | Repeated runs of `qloo-smoke` | Redis cache accelerates repeat calls and guarantees offline reproducibility |
+
 
 ---
 
