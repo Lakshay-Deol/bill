@@ -1,0 +1,47 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+
+# env — never commit a key
+.env
+.env.local
+.env*.local
+.env.production
+
+# Qloo response payloads are captured locally and must never be committed
+docs/payloads/
+
+# test + tooling
+coverage/
+playwright-report/
+test-results/
+.vercel/
+.turbo/
+
+# logs and OS noise
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# stray tooling artifacts
+.deep-copilot/
+.antigravity/logs/
+
+# internal planning and prompt files (do not commit)
+AGENTS.md
+ANTIGRAVITY.md
+IMPLEMENTATION_PLAN.md
+PLAN.md
+PROGRESS.md
+PROMPTS.md
+START-HERE.md
+SUBMISSION.md
+
