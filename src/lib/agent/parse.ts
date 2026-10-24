@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { env } from "@/lib/env";
 
 export const ConstraintPatchSchema = z.object({
   budget: z.number().optional(),
@@ -64,14 +63,19 @@ function parseRuleBased(input: string): ConstraintPatch {
  * Parses user natural language request into structured brief constraint updates.
  */
 export async function parseConstraintEdit(naturalLanguagePrompt: string): Promise<ConstraintPatch> {
+  const apiKey =
+    typeof process !== "undefined"
+      ? process.env.NEXT_PUBLIC_DEEPSEEK_API_KEY || process.env.DEEPSEEK_API_KEY
+      : undefined;
+
   // If DeepSeek or OpenAI API key is present, attempt LLM JSON-mode parsing
-  if (env.DEEPSEEK_API_KEY) {
+  if (apiKey) {
     try {
       const res = await fetch("https://api.deepseek.com/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${env.DEEPSEEK_API_KEY}`,
+          Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
           model: "deepseek-chat",

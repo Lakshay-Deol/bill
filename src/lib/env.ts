@@ -35,6 +35,19 @@ const envSchema = z
   });
 
 function validateEnv() {
+  // If running in browser client, return safe non-sensitive defaults without throwing
+  if (typeof window !== "undefined") {
+    return {
+      NODE_ENV: (process.env.NODE_ENV as "development" | "production" | "test") || "development",
+      QLOO_BASE_URL: "https://hackathon.api.qloo.com",
+      QLOO_MODE: "live" as const,
+      QLOO_API_KEY: undefined,
+      UPSTASH_REDIS_URL: undefined,
+      UPSTASH_REDIS_TOKEN: undefined,
+      DEEPSEEK_API_KEY: undefined,
+    };
+  }
+
   const parsed = envSchema.safeParse(process.env);
   if (!parsed.success) {
     const errorDetails = parsed.error.issues
