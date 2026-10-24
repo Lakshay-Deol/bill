@@ -31,7 +31,7 @@ export interface TasteMatrixResult {
   };
 }
 
-const callConcurrency = pLimit(6);
+const callConcurrency = pLimit(4);
 
 /**
  * Retrieves neighbor set for an artist, cached in Redis/memory.
@@ -218,11 +218,15 @@ export async function buildUniverseAndMatrix(
       if (Object.keys(candidate.neighbors).length > 0) {
         return; // Already has neighbor set from seed stage
       }
-      totalCalls++;
-      const res = await getArtistNeighborSet(candidate.id, options.market);
-      if (res.cacheHit) cacheHits++;
-      candidate.neighbors = res.neighborsMap;
-      candidate.isEnriched = true;
+      try {
+        totalCalls++;
+        const res = await getArtistNeighborSet(candidate.id, options.market);
+        if (res.cacheHit) cacheHits++;
+        candidate.neighbors = res.neighborsMap;
+        candidate.isEnriched = true;
+      } catch (err) {
+        console.warn(`[Matrix Enrich] Warning: could not enrich ${candidate.name} (${candidate.id}):`, err);
+      }
     })
   );
 

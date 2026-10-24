@@ -180,28 +180,60 @@ export async function qlooGet<T>(
     }
   }
 
-  let res: Response | null = null;
+  let parsedData: T | null = null;
   let lastError: unknown = null;
 
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
-      res = await fetch(url.toString(), {
+      const res = await fetch(url.toString(), {
         method: "GET",
         headers: {
           "X-Api-Key": env.QLOO_API_KEY ?? "",
           Accept: "application/json",
         },
-        signal: AbortSignal.timeout(attempt === 1 ? 15_000 : 20_000),
+        signal: AbortSignal.timeout(attempt === 1 ? 30_000 : 45_000),
       });
+
+      if (!res.ok) {
+        const rawText = await res.text().catch(() => "");
+        if (res.status === 401) {
+          throw new QlooAuthError(path, res.status, rawText);
+        }
+        if (res.status === 403) {
+          throw new QlooForbiddenError(path, res.status, rawText);
+        }
+        if (res.status === 400) {
+          throw new QlooSignalError(path, res.status, rawText);
+        }
+        throw new QlooError(`HTTP ${res.status}: ${res.statusText}`, path, res.status, rawText);
+      }
+
+      const json = await res.json();
+      const parsed = schema.safeParse(json);
+      if (!parsed.success) {
+        throw new QlooShapeError(path, parsed.error, json);
+      }
+
+      parsedData = parsed.data;
       break;
     } catch (err: unknown) {
       lastError = err;
+      if (
+        err instanceof QlooAuthError ||
+        err instanceof QlooForbiddenError ||
+        err instanceof QlooSignalError ||
+        err instanceof QlooShapeError
+      ) {
+        throw err;
+      }
+
       if (attempt === 1) {
-        // Short pause before retry
-        await new Promise((r) => setTimeout(r, 1000));
+        console.warn(`[Qloo API Retry] Attempt 1 for ${path} encountered error (${err instanceof Error ? err.message : String(err)}). Retrying in 1500ms...`);
+        await new Promise((r) => setTimeout(r, 1500));
         continue;
       }
-      if (err instanceof Error && err.name === "TimeoutError") {
+
+      if (err instanceof Error && (err.name === "TimeoutError" || err.message.includes("timeout") || err.message.includes("aborted"))) {
         throw new QlooTimeoutError(path);
       }
       throw new QlooError(
@@ -211,35 +243,14 @@ export async function qlooGet<T>(
     }
   }
 
-  if (!res) {
-    throw new QlooError("No response received from Qloo API", path);
+  if (parsedData === null) {
+    throw new QlooError(
+      lastError instanceof Error ? lastError.message : "No valid response received from Qloo API",
+      path
+    );
   }
 
-
-  if (!res.ok) {
-    const rawText = await res.text().catch(() => "");
-    if (res.status === 401) {
-      throw new QlooAuthError(path, res.status, rawText);
-    }
-    if (res.status === 403) {
-      throw new QlooForbiddenError(path, res.status, rawText);
-    }
-    if (res.status === 400) {
-      throw new QlooSignalError(path, res.status, rawText);
-    }
-    throw new QlooError(`HTTP ${res.status}: ${res.statusText}`, path, res.status, rawText);
-  }
-
-  const json = await res.json().catch((err) => {
-    throw new QlooError(`Failed to parse JSON response: ${err.message}`, path, res.status);
-  });
-
-  const parsed = schema.safeParse(json);
-  if (!parsed.success) {
-    throw new QlooShapeError(path, parsed.error, json);
-  }
-
-  return parsed.data;
+  return parsedData;
 }
 
 /**
