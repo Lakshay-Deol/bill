@@ -15,11 +15,18 @@ export interface BriefState {
 interface BriefControlsProps {
   brief: BriefState;
   onChange: (updated: Partial<BriefState>) => void;
+  onSelectPreset?: (preset: BriefState) => void;
   onSolve: () => void;
   isLoading: boolean;
 }
 
-export function BriefControls({ brief, onChange, onSolve, isLoading }: BriefControlsProps) {
+export function BriefControls({
+  brief,
+  onChange,
+  onSelectPreset,
+  onSolve,
+  isLoading,
+}: BriefControlsProps) {
   const presets = [
     {
       name: "Austin Indie 2026",
@@ -63,8 +70,15 @@ export function BriefControls({ brief, onChange, onSolve, isLoading }: BriefCont
             <button
               key={p.name}
               type="button"
-              onClick={() => onChange(p)}
-              className="text-xs px-2.5 py-1 rounded-lg border border-zinc-800 bg-zinc-800/40 text-zinc-300 hover:border-violet-500/50 hover:text-white transition"
+              disabled={isLoading}
+              onClick={() => {
+                if (onSelectPreset) {
+                  onSelectPreset(p);
+                } else {
+                  onChange(p);
+                }
+              }}
+              className="text-xs px-2.5 py-1 rounded-lg border border-zinc-800 bg-zinc-800/40 text-zinc-300 hover:border-violet-500/50 hover:text-white transition disabled:opacity-50"
             >
               {p.name}
             </button>

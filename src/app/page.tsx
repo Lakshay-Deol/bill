@@ -26,40 +26,60 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const executeSolve = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/solve", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...brief,
-          feeOverrides,
-        }),
-      });
+  const executeSolve = useCallback(
+    async (targetBrief?: BriefState, targetOverrides?: Record<string, number>) => {
+      const activeBrief = targetBrief ?? brief;
+      const activeOverrides = targetOverrides ?? feeOverrides;
+      setIsLoading(true);
+      setError(null);
 
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.message ?? `Solver API returned status ${res.status}`);
+      try {
+        const res = await fetch("/api/solve", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...activeBrief,
+            feeOverrides: activeOverrides,
+          }),
+        });
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.message ?? `Solver API returned status ${res.status}`);
+        }
+
+        const data: LineupReceipt = await res.json();
+        setReceipt(data);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "Failed to solve lineup");
+      } finally {
+        setIsLoading(false);
       }
+    },
+    [brief, feeOverrides]
+  );
 
-      const data: LineupReceipt = await res.json();
-      setReceipt(data);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to solve lineup");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [brief, feeOverrides]);
-
-  // Initial solve on mount
+  // Initial solve on mount (once)
   useEffect(() => {
     executeSolve();
-  }, [executeSolve]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSelectPreset = (preset: BriefState) => {
+    setBrief(preset);
+    executeSolve(preset);
+  };
+
+  const handleApplyPatch = (patch: Partial<BriefState>) => {
+    const updated = { ...brief, ...patch };
+    setBrief(updated);
+    executeSolve(updated);
+  };
 
   const handleOverrideFee = (actId: string, fee: number) => {
-    setFeeOverrides((prev) => ({ ...prev, [actId]: fee }));
+    const updated = { ...feeOverrides, [actId]: fee };
+    setFeeOverrides(updated);
+    executeSolve(brief, updated);
   };
 
   return (
@@ -102,14 +122,38 @@ export default function Home() {
           <BriefControls
             brief={brief}
             onChange={(updated) => setBrief((prev) => ({ ...prev, ...updated }))}
-            onSolve={executeSolve}
+            onSelectPreset={handleSelectPreset}
+            onSolve={() => executeSolve()}
             isLoading={isLoading}
           />
           <AgentPanel
-            onApplyPatch={(patch) => setBrief((prev) => ({ ...prev, ...patch }))}
+            onApplyPatch={handleApplyPatch}
             isLoading={isLoading}
           />
         </section>
+
+        {/* Loading Skeleton */}
+        {isLoading && !receipt && (
+          <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-8 text-center space-y-4 animate-pulse">
+            <div className="w-10 h-10 mx-auto rounded-full bg-violet-500/20 flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-violet-400 animate-spin" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-sm font-semibold text-zinc-200">
+                Optimizing Festival Portfolio...
+              </h3>
+              <p className="text-xs text-zinc-500 max-w-md mx-auto">
+                Querying Qloo taste graph, scoring marginal unique reach, and eliminating overlapping listener cannibalization.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto pt-4">
+              <div className="h-16 rounded-xl bg-zinc-800/40"></div>
+              <div className="h-16 rounded-xl bg-zinc-800/40"></div>
+              <div className="h-16 rounded-xl bg-zinc-800/40"></div>
+              <div className="h-16 rounded-xl bg-zinc-800/40"></div>
+            </div>
+          </div>
+        )}
 
         {/* S2 & S3: Poster & Value Comparison */}
         {receipt && (
