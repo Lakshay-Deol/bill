@@ -12,7 +12,8 @@
     "qloo:smoke": "tsx scripts/qloo-smoke.ts",
     "matrix:build": "tsx scripts/matrix-build.ts",
     "solve": "tsx scripts/solve.ts",
-    "bench": "tsx scripts/bench.ts"
+    "bench": "tsx scripts/bench.ts",
+    "frontier": "tsx scripts/frontier.ts"
   },
   "dependencies": {
     "@upstash/redis": "^1.34.4",
