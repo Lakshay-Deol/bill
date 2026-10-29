@@ -59,28 +59,28 @@ void main() {
     if (mouse.x <= 0.0 && mouse.y <= 0.0) {
         mouse = vec2(0.5, 0.5);
     }
-    float t = u_time * 0.22;
-    vec2 q = vec2(fbm(uv * 1.8 + vec2(t * 0.35, t * 0.15)),
-                  fbm(uv * 1.8 + vec2(-t * 0.25, t * 0.3)));
-    vec2 r = vec2(fbm(uv * 2.2 + 2.0 * q + vec2(mouse.x * 0.8, mouse.y * 0.8) + vec2(1.7, 9.2) + t * 0.18),
-                  fbm(uv * 2.2 + 2.0 * q + vec2(-mouse.y * 0.8, mouse.x * 0.8) + vec2(8.3, 2.8) + t * 0.14));
-    float f = fbm(uv * 1.5 + 2.5 * r + t * 0.12);
+    float t = u_time * 0.18;
+    vec2 q = vec2(fbm(uv * 1.6 + vec2(t * 0.25, t * 0.12)),
+                  fbm(uv * 1.6 + vec2(-t * 0.20, t * 0.22)));
+    vec2 r = vec2(fbm(uv * 2.0 + 2.2 * q + vec2(mouse.x * 0.6, mouse.y * 0.6) + vec2(1.7, 9.2) + t * 0.15),
+                  fbm(uv * 2.0 + 2.2 * q + vec2(-mouse.y * 0.6, mouse.x * 0.6) + vec2(8.3, 2.8) + t * 0.12));
+    float f = fbm(uv * 1.4 + 2.2 * r + t * 0.10);
     
-    vec3 c1 = vec3(1.0, 0.44, 0.32);  // Electric coral / sunset flame
-    vec3 c2 = vec3(1.0, 0.72, 0.42);  // Radiant warm golden peach
-    vec3 c3 = vec3(0.69, 0.31, 1.0);  // Signal violet / lilac neon (#af50ff)
-    vec3 c4 = vec3(0.96, 0.22, 0.58);  // Vibrant magenta bloom
-    vec3 c5 = vec3(0.18, 0.42, 0.95);  // Deep celestial indigo undertone
+    vec3 c1 = vec3(0.05, 0.04, 0.10);  // Deep celestial void
+    vec3 c2 = vec3(0.72, 0.28, 0.98);  // Electric violet / lilac neon (#af50ff)
+    vec3 c3 = vec3(0.98, 0.44, 0.32);  // Radiant warm sunset flame (#fc5a36)
+    vec4 lime = vec4(0.80, 0.95, 0.19, 1.0); // Neon acid lime accent (#cbf230)
+    vec3 c5 = vec3(0.14, 0.26, 0.72);  // Deep ultramarine indigo undertone
     
-    vec3 col = mix(c1, c2, clamp(f * 1.2, 0.0, 1.0));
+    vec3 col = mix(c1, c2, clamp(f * 1.35, 0.0, 1.0));
     col = mix(col, c3, clamp(length(q) * 0.9, 0.0, 1.0));
-    col = mix(col, c4, clamp(length(r.x) * 1.1, 0.0, 1.0));
-    col = mix(col, c5, clamp(pow(r.y, 2.0) * 0.6, 0.0, 1.0));
-    col = pow(col, vec3(0.92));
+    col = mix(col, lime.rgb, clamp(pow(length(r.x), 2.2) * 0.85, 0.0, 1.0));
+    col = mix(col, c5, clamp(pow(r.y, 2.0) * 0.7, 0.0, 1.0));
+    col = pow(col, vec3(0.94));
     
     vec2 vig = uv * (1.0 - uv.yx);
     float vignette = vig.x * vig.y * 15.0;
-    vignette = clamp(pow(vignette, 0.15), 0.75, 1.0);
+    vignette = clamp(pow(vignette, 0.18), 0.70, 1.0);
     gl_FragColor = vec4(col * vignette, 1.0);
 }`;
 
@@ -167,10 +167,10 @@ export function FluidShader() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden" aria-hidden="true">
-      <canvas id="shader-canvas-ANIMATION_19" ref={canvasRef} className="w-full h-full block opacity-70" />
-      <div className="absolute inset-0 bg-[#09090b]/80 backdrop-blur-[4px] pointer-events-none" />
-      <div className="absolute inset-0 bg-radial from-transparent via-[#09090b]/60 to-[#070709]/95 pointer-events-none" />
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+      <canvas id="shader-canvas-ANIMATION_19" ref={canvasRef} className="w-full h-full block opacity-85" />
+      <div className="absolute inset-0 bg-[#09090b]/50 backdrop-blur-[2px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(9,9,11,0.65)_60%,rgba(7,7,9,0.92)_100%)] pointer-events-none" />
     </div>
   );
 }

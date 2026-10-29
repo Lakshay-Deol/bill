@@ -94,7 +94,7 @@ export function BriefControls({
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-white/10">
         <div>
           <h2 className="font-syne text-2xl sm:text-3xl uppercase tracking-tight text-[#f1eff0] font-bold">
-            The Bill Component Suite
+            Crowdfolio Component Suite
           </h2>
           <p className="font-space text-sm text-[#a69fa9] mt-1">
             Live UI widgets and primitives powering real-time greedy submodular optimization.

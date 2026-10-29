@@ -54,7 +54,7 @@ function validateEnv() {
       .map((issue) => `  - ${issue.path.join(".")}: ${issue.message}`)
       .join("\n");
     throw new Error(
-      `[The Bill] Fatal Environment Configuration Error:\n${errorDetails}\n` +
+      `[Crowdfolio] Fatal Environment Configuration Error:\n${errorDetails}\n` +
       `Check your .env.local file against .env.example.`
     );
   }

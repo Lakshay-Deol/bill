@@ -111,7 +111,7 @@ export default function Home() {
         hasReceipt={!!receipt}
       />
 
-      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-32 space-y-16">
+      <main className="relative z-10 flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-32 space-y-16">
         {/* Section 1 & 2: Hero Section */}
         <div ref={heroRef} id="hero">
           <LandingHero
@@ -152,7 +152,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* Section 5: The Bill Component Suite & NLP Sandbox */}
+        {/* Section 5: Crowdfolio Component Suite & NLP Sandbox */}
         <div ref={suiteRef}>
           <BriefControls
             brief={brief}

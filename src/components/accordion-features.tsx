@@ -10,7 +10,7 @@ export function AccordionFeatures() {
     {
       num: "01",
       title: "Submodular Marginal Reach Optimization",
-      desc: "Raw stream counts trick promoters into booking duplicative acts. The Bill penalizes overlapping listener pools so every dollar spent expands distinct ticket-buying households.",
+      desc: "Raw stream counts trick promoters into booking duplicative acts. Crowdfolio penalizes overlapping listener pools so every dollar spent expands distinct ticket-buying households.",
     },
     {
       num: "02",

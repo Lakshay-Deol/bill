@@ -54,7 +54,7 @@ export function LandingHero({
           </h1>
           <p className="font-space text-[#a69fa9] text-base sm:text-lg max-w-2xl leading-relaxed">
             Traditional festival promoters book greedy acts for ego and acquire the identical demographic thrice.{" "}
-            <strong className="text-[#f1eff0] font-semibold">The Bill</strong> solves budget-constrained submodular coverage over Qloo&apos;s 250M-entity taste graph—maximizing distinct marginal reach per dollar while capping cannibalization.
+            <strong className="text-[#f1eff0] font-semibold">Crowdfolio</strong> solves budget-constrained submodular coverage over Qloo&apos;s 250M-entity taste graph—maximizing distinct marginal reach per dollar while capping cannibalization.
           </p>
         </div>
 

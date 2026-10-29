@@ -3,7 +3,9 @@
 import React, { useState } from "react";
 import { LineupReceipt, BookedSlot } from "@/lib/solver";
 import { Poster } from "./poster";
-import { Grid, SlidersHorizontal } from "lucide-react";
+import { AttributionInspector } from "./attribution-inspector";
+import { NaiveComparisonBanner } from "./naive-comparison-banner";
+import { Grid, SlidersHorizontal, Users, DollarSign, Activity } from "lucide-react";
 
 interface CuratedBillSectionProps {
   receipt: LineupReceipt;
@@ -38,54 +40,67 @@ export function CuratedBillSection({
 
   return (
     <section id="bill-section" className="space-y-6">
-      {/* Section Title + Solver Control Bar (eyebrow removed) */}
+      {/* Section Title + Solver Control Bar & Metrics Summary */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-5 rounded-2xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 ring-1 ring-white/5">
-        <div>
+        <div className="space-y-1">
           <h2 className="font-syne text-2xl uppercase tracking-tight text-[#f1eff0]">
             The Curated Bill
           </h2>
+          <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] text-[#a69fa9]">
+            <span className="flex items-center gap-1">
+              <Users className="w-3 h-3 text-[#cbf230]" />
+              <strong className="text-[#f1eff0]">
+                {Math.round(receipt.modeledUniqueDemand).toLocaleString("en-US")}
+              </strong>{" "}
+              Unique Reach
+            </span>
+            <span>·</span>
+            <span className="flex items-center gap-1">
+              <DollarSign className="w-3 h-3 text-[#dfb7ff]" />
+              <strong className="text-[#f1eff0]">
+                est. ${(receipt.totalSpent / 1000).toFixed(1)}k
+              </strong>{" "}
+              Spent
+            </span>
+            <span>·</span>
+            <span className="flex items-center gap-1">
+              <Activity className="w-3 h-3 text-[#cbf230]" />
+              <strong className="text-[#f1eff0]">
+                {receipt.avgTasteOverlap.toFixed(2)}
+              </strong>{" "}
+              Avg tasteOverlap
+            </span>
+          </div>
         </div>
 
         {/* Solver Quick Controls */}
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1 bg-[#17171b] px-1 py-1 rounded-full border border-white/10">
-            <span className="font-mono text-[10px] text-[#a69fa9] px-2 uppercase">CAP:</span>
-            <span className="px-2.5 py-0.5 rounded-full bg-[#cbf230] text-[#09090b] font-mono text-xs font-bold">
-              3k
-            </span>
-            <span className="px-2.5 py-0.5 rounded-full text-[#a69fa9] font-mono text-xs">
-              10k
-            </span>
-            <span className="px-2.5 py-0.5 rounded-full text-[#a69fa9] font-mono text-xs">
-              40k
-            </span>
-          </div>
-
           <button
             type="button"
             onClick={() => setIsNaive(!isNaive)}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono text-[11px] uppercase tracking-wider border border-white/10 transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full font-mono text-[11px] uppercase tracking-wider border transition-all cursor-pointer font-semibold ${
               isNaive
-                ? "bg-[#fc5a36] text-white"
-                : "bg-[#1e1e24] hover:bg-[#28272c] text-[#f1eff0]"
+                ? "bg-[#fc5a36] text-white border-[#fc5a36] shadow-[0_0_15px_rgba(252,90,54,0.35)]"
+                : "bg-[#1e1e24] hover:bg-[#28272c] text-[#f1eff0] border-white/10"
             }`}
           >
-            <SlidersHorizontal className="w-3.5 h-3.5 text-[#ffb4a3]" />
-            <span>{isNaive ? "RESTORE OPTIMAL SOLVER" : "VIEW NAIVE GREEDY"}</span>
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            <span>{isNaive ? "RESTORE OPTIMAL SOLVER" : "COMPARE NAIVE GREEDY"}</span>
           </button>
         </div>
       </div>
+
+      {/* Naive Greedy Comparison Banner (revealed when toggled) */}
+      {isNaive && <NaiveComparisonBanner receipt={receipt} />}
 
       {/* Main Grid: Poster (8 cols) + Heatmap & Inspector (4 cols) */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 w-full">
         {/* Left 8 cols: Billboard Presentation */}
         <div className="xl:col-span-8 flex flex-col gap-6">
           <div className="bg-[#0e0e0e]/80 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-white/10 shadow-xl relative overflow-hidden ring-1 ring-white/5">
-            {/* Ambient Corner Glows */}
             <div className="absolute -top-16 -right-16 w-56 h-56 bg-[#dfb7ff]/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-[#cbf230]/10 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Festival Header (eyebrow removed) */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 mb-6 border-b border-white/10">
               <div>
                 <h3 className="font-syne text-2xl sm:text-3xl uppercase text-[#f1eff0] tracking-tight font-bold">
@@ -106,7 +121,6 @@ export function CuratedBillSection({
               </div>
             </div>
 
-            {/* Tiered Acts */}
             <Poster
               stages={receipt.stages}
               onSelectSlot={onSelectSlot}
@@ -118,7 +132,7 @@ export function CuratedBillSection({
 
         {/* Right 4 cols: Pairwise Matrix & Receipt Inspector */}
         <div className="xl:col-span-4 flex flex-col gap-6">
-          {/* Heatmap Card (eyebrow removed) */}
+          {/* Heatmap Card */}
           <div className="p-6 rounded-3xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 shadow-xl ring-1 ring-white/5 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h4 className="font-syne text-lg uppercase font-bold text-[#f1eff0]">
@@ -133,7 +147,7 @@ export function CuratedBillSection({
               Pairwise cosine overlap in Qloo taste space. The optimizer heavily penalizes overlaps above the 0.35 threshold.
             </p>
 
-            {/* 6x6 CSS Matrix */}
+            {/* 6x6 Matrix */}
             <div className="bg-[#131316]/90 rounded-2xl p-3 border border-white/10 flex flex-col items-center">
               <div className="grid grid-cols-6 gap-1 w-full max-w-[280px] text-center font-mono text-[10px] text-[#a69fa9] mb-1 font-bold">
                 {matrixLabels.map((lbl, i) => (
@@ -167,68 +181,34 @@ export function CuratedBillSection({
               </div>
             </div>
 
+            {/* Threshold Legend */}
+            <div className="flex items-center justify-between text-[10px] font-mono text-[#a69fa9] px-1 pt-1 border-t border-white/5">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded bg-[#1e1e24] border border-white/10" /> &lt;0.20 Diverse
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded bg-[#cbf230]/40" /> 0.20-0.35 Safe
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded bg-[#dfb7ff]" /> &gt;0.35 Penalized
+              </span>
+            </div>
+
             <button
               type="button"
               onClick={onOpenMatrixModal}
-              className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono uppercase tracking-wider text-[#dfb7ff] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono uppercase tracking-wider text-[#dfb7ff] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Grid className="w-3.5 h-3.5" />
               <span>Full Cosine Heatmap Matrix</span>
             </button>
           </div>
 
-          {/* Attribution Receipt Card (eyebrow removed) */}
-          {activeSlot && (
-            <div className="p-6 rounded-3xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 shadow-xl ring-1 ring-white/5 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                <h4 className="font-syne text-sm font-bold text-[#f1eff0] uppercase">
-                  Attribution Receipt
-                </h4>
-                <span className="font-mono text-[10px] text-[#a69fa9]">
-                  NODE #{activeSlot.id.slice(0, 8)}
-                </span>
-              </div>
-
-              <div>
-                <span className="text-[10px] font-mono uppercase text-[#a69fa9]">
-                  {activeSlot.genres.join(" · ")}
-                </span>
-                <h4 className="font-syne text-xl uppercase font-bold text-[#f1eff0]">
-                  {activeSlot.name}
-                </h4>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div className="p-2.5 rounded-xl bg-[#131316] border border-white/5">
-                  <span className="text-[10px] text-[#a69fa9] block">TALENT FEE</span>
-                  <span className="font-bold text-[#f1eff0]">
-                    est. ${activeSlot.fee.toLocaleString("en-US")}
-                  </span>
-                </div>
-
-                <div className="p-2.5 rounded-xl bg-[#131316] border border-white/5">
-                  <span className="text-[10px] text-[#a69fa9] block">MARGINAL GAIN</span>
-                  <span className="font-bold text-[#cbf230]">
-                    +{(activeSlot.marginalUnique ?? 0).toLocaleString("en-US")} fans
-                  </span>
-                </div>
-
-                <div className="p-2.5 rounded-xl bg-[#131316] border border-white/5">
-                  <span className="text-[10px] text-[#a69fa9] block">CPUR (EST.)</span>
-                  <span className="font-bold text-[#f1eff0]">
-                    ${((activeSlot.fee / Math.max(1, activeSlot.marginalUnique ?? 1))).toFixed(2)}/fan
-                  </span>
-                </div>
-
-                <div className="p-2.5 rounded-xl bg-[#131316] border border-white/5">
-                  <span className="text-[10px] text-[#a69fa9] block">MAX PAIR OVERLAP</span>
-                  <span className="font-bold text-[#dfb7ff]">
-                    {(activeSlot.closestActOverlap ?? 0.18).toFixed(2)}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Attribution Receipt Inspector */}
+          <AttributionInspector
+            activeSlot={activeSlot}
+            onOverrideFee={onOverrideFee}
+          />
         </div>
       </div>
     </section>

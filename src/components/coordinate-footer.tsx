@@ -22,7 +22,7 @@ export function CoordinateFooter({ market }: CoordinateFooterProps) {
         {/* Left: '+' icon, Fly Direct and Festival Portfolio Solver */}
         <div className="flex items-center gap-3">
           <Plus className="w-4 h-4 text-[#af50ff]" />
-          <span className="text-[#f7f9fa] font-medium tracking-tight">The Bill</span>
+          <span className="text-[#f7f9fa] font-medium tracking-tight">Crowdfolio</span>
           <span className="text-[#474747]">&bull;</span>
           <span className="text-[#828384]">Festival Portfolio Optimizer</span>
           <span className="text-[#474747]">&bull;</span>

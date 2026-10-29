@@ -18,7 +18,7 @@ export function PosterModal({ receipt, market, isOpen, onClose }: PosterModalPro
 
   const handleCopy = () => {
     const text = [
-      `=== THE BILL FESTIVAL 2026 // ${market.toUpperCase()} ===`,
+      `=== CROWDFOLIO FESTIVAL 2026 // ${market.toUpperCase()} ===`,
       `Grounded in Qloo Taste Graph AI`,
       `Modeled Unique Demand: ${receipt.modeledUniqueDemand.toLocaleString("en-US")} attendees (+${receipt.upliftPercent}% uplift)`,
       `Avg Taste Overlap: ${(receipt.avgTasteOverlap * 100).toFixed(1)}%`,
@@ -87,7 +87,7 @@ export function PosterModal({ receipt, market, isOpen, onClose }: PosterModalPro
               QLOO CULTURAL TASTE GRAPH PRESENTS
             </div>
             <h1 className="text-4xl sm:text-6xl font-normal tracking-[-0.03em] text-[#f7f9fa] uppercase">
-              THE BILL
+              CROWDFOLIO
             </h1>
             <div className="text-xs font-mono text-[#828384] tracking-[0.2em] uppercase">
               {market} &bull; 2026 EDITION

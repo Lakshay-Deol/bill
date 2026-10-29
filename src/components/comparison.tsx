@@ -24,7 +24,7 @@ export function Comparison({ receipt }: ComparisonProps) {
             BENCHMARK EVALUATION
           </div>
           <h3 className="text-xl sm:text-2xl font-normal text-[#f7f9fa] tracking-tight">
-            The Bill vs. Naive Booking
+            Crowdfolio vs. Naive Booking
           </h3>
           <p className="text-[14px] font-light text-[#828384]">
             Same talent budget spent on naive chart-toppers vs. Qloo submodular portfolio optimization.
@@ -100,7 +100,7 @@ export function Comparison({ receipt }: ComparisonProps) {
         <div className="grid grid-cols-2 text-xs font-mono text-[#828384] bg-[#f7f9fa]/[0.04] p-3.5 border-b border-[#f7f9fa]/12 uppercase tracking-wider">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#af50ff]" />
-            <span>The Bill Portfolio Lineup ({receipt.lineup.length} Acts)</span>
+            <span>Crowdfolio Portfolio Lineup ({receipt.lineup.length} Acts)</span>
           </div>
           <div className="flex items-center gap-2 text-[#828384]">
             <span className="w-2 h-2 rounded-full bg-[#828384]" />

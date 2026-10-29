@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "The Bill — Portfolio Lineup Solver (Powered by Qloo)",
+  title: "Crowdfolio — Portfolio Lineup Solver (Powered by Qloo)",
   description:
     "A budget-constrained lineup portfolio optimizer grounded in Qloo's cultural taste graph.",
 };

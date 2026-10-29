@@ -1,22 +1,55 @@
 "use client";
 
-import React from "react";
-import { Terminal, ShieldCheck, Database, MapPin, DollarSign, Receipt, CheckCircle2 } from "lucide-react";
+import React, { useState } from "react";
+import { Terminal, ShieldCheck, Database, MapPin, DollarSign, Receipt, CheckCircle2, Cpu, GitCommit } from "lucide-react";
 
 export function QlooShowcase() {
+  const [activeCluster, setActiveCluster] = useState<number>(0);
+
+  const clusters = [
+    {
+      title: "Austin Neo-Psych & Soul",
+      acts: "Khruangbin · Black Pumas · Leon Bridges",
+      overlap: "0.19 avg tasteOverlap",
+      draw: "+18% Austin DMA Lift",
+      color: "#cbf230",
+    },
+    {
+      title: "French Touch & Nu-Disco",
+      acts: "Justice · Parcels · Polo & Pan",
+      overlap: "0.22 avg tasteOverlap",
+      draw: "High Marginal Unique Catch",
+      color: "#dfb7ff",
+    },
+    {
+      title: "Afro-Funk & Desert Blues",
+      acts: "Tinariwen · Mdou Moctar · Kokoroko",
+      overlap: "0.14 avg tasteOverlap",
+      draw: "Zero Cannibalization Risk",
+      color: "#ffb4a3",
+    },
+    {
+      title: "Ambient & Modular Synth",
+      acts: "Tycho · Bonobo · Jon Hopkins",
+      overlap: "0.20 avg tasteOverlap",
+      draw: "Sunset / Grove Stage Fit",
+      color: "#cbf230",
+    },
+  ];
+
   return (
     <section id="qloo" className="w-full bg-[#070709]/80 backdrop-blur-md rounded-3xl p-6 sm:p-10 border border-white/10 relative overflow-hidden ring-1 ring-white/5 space-y-8">
       {/* Background radial tint */}
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#dfb7ff]/5 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Header (eyebrow removed) */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-white/10">
         <div>
           <h2 className="font-syne text-3xl sm:text-4xl uppercase tracking-tight text-[#f1eff0]">
             Why Qloo is Load-Bearing
           </h2>
           <p className="font-space text-sm sm:text-base text-[#a69fa9] mt-1 max-w-2xl leading-relaxed">
-            Without Qloo&apos;s high-dimensional cultural embeddings, promoters optimize solely for isolated vanity metrics (Spotify monthly listeners). The Bill computes cross-genre covariance to maximize true distinct attendance.
+            Without Qloo&apos;s high-dimensional cultural embeddings, promoters optimize solely for isolated vanity metrics (Spotify monthly listeners). Crowdfolio computes cross-genre covariance to maximize true distinct attendance.
           </p>
         </div>
         <div className="px-3.5 py-1.5 rounded-full bg-[#131316] border border-white/10 text-xs font-mono text-[#a69fa9] self-start md:self-auto flex items-center gap-2">
@@ -109,6 +142,43 @@ export function QlooShowcase() {
           <div className="mt-5 pt-3 border-t border-white/5 font-mono text-[11px] text-[#cbf230] flex items-center gap-1.5">
             <Receipt className="w-3.5 h-3.5" /> Deterministic Vector Proof
           </div>
+        </div>
+      </div>
+
+      {/* Interactive Taste Space Cluster Inspector */}
+      <div className="p-5 rounded-2xl bg-[#131316]/90 border border-white/10 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/10">
+          <div className="flex items-center gap-2">
+            <Cpu className="w-4 h-4 text-[#cbf230]" />
+            <h3 className="font-syne text-sm font-bold uppercase text-[#f1eff0]">
+              512-Dimensional Taste Projection Clusters
+            </h3>
+          </div>
+          <span className="font-mono text-[10px] text-[#a69fa9]">
+            SELECT A GENRE MANIFOLD TO INSPECT TASTEOVERLAP COVARIANCE
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {clusters.map((c, idx) => (
+            <button
+              key={c.title}
+              type="button"
+              onClick={() => setActiveCluster(idx)}
+              className={`p-3.5 rounded-xl border text-left transition-all font-mono text-xs cursor-pointer ${
+                activeCluster === idx
+                  ? "bg-[#1e1e24] border-[#cbf230] shadow-[0_0_12px_rgba(203,242,48,0.2)]"
+                  : "bg-[#070709]/70 border-white/5 hover:border-white/20"
+              }`}
+            >
+              <div className="font-bold text-[#f1eff0] mb-1">{c.title}</div>
+              <div className="text-[10px] text-[#a69fa9] mb-2 truncate">{c.acts}</div>
+              <div className="flex items-center justify-between text-[10px]">
+                <span className="text-[#cbf230]">{c.overlap}</span>
+                <span className="text-[#dfb7ff]">{c.draw}</span>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
 
