@@ -74,7 +74,29 @@ export default function Home() {
   );
 
   useEffect(() => {
-    executeSolve();
+    let initialBrief = brief;
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const urlMarket = params.get("market");
+      const urlBudget = params.get("budget");
+      const urlCap = params.get("capacity");
+      const urlActs = params.get("acts") || params.get("actCount");
+      const urlSeeds = params.get("seeds");
+      const urlLocal = params.get("local");
+
+      if (urlMarket || urlBudget || urlCap || urlActs || urlSeeds || urlLocal !== null) {
+        initialBrief = {
+          market: urlMarket || brief.market,
+          budget: urlBudget ? parseInt(urlBudget, 10) : brief.budget,
+          capacity: urlCap ? parseInt(urlCap, 10) : brief.capacity,
+          actCount: urlActs ? parseInt(urlActs, 10) : brief.actCount,
+          requireLocal: urlLocal !== null ? urlLocal === "true" || urlLocal === "1" : brief.requireLocal,
+          seeds: urlSeeds ? urlSeeds.split(",").map((s) => s.trim()) : brief.seeds,
+        };
+        setBrief(initialBrief);
+      }
+    }
+    executeSolve(initialBrief);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

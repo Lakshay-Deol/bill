@@ -11,9 +11,13 @@ const SolveRequestSchema = z.object({
   actCount: z.number().min(2).max(30).default(8),
   seeds: z.array(z.string()).default(["Phoebe Bridgers", "boygenius", "Lucy Dacus"]),
   requireLocal: z.boolean().default(false),
+  minLocalActs: z.number().min(0).max(10).default(0),
   mustInclude: z.array(z.string()).default([]),
+  exclude: z.array(z.string()).default([]),
   maxPerGenre: z.record(z.number()).default({}),
   feeOverrides: z.record(z.number()).default({}),
+  stageCount: z.number().min(1).max(10).default(2),
+  dayCount: z.number().min(1).max(5).default(1),
 });
 
 /**
@@ -39,9 +43,13 @@ export async function POST(req: NextRequest) {
       actCount,
       seeds,
       requireLocal,
+      minLocalActs,
       mustInclude,
+      exclude,
       maxPerGenre,
       feeOverrides,
+      stageCount,
+      dayCount,
     } = parseResult.data;
 
     // Resolve seed entity IDs
@@ -96,9 +104,12 @@ export async function POST(req: NextRequest) {
       capacity,
       actCount,
       requireLocal,
+      minLocalActs,
       mustInclude,
+      exclude,
       maxPerGenre,
-      stageCount: 2,
+      stageCount,
+      dayCount,
     });
 
     return NextResponse.json(receipt);
