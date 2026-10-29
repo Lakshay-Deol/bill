@@ -1,163 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
 @import "tailwindcss";
 
 :root {
-  /* Colors */
-  --color-near-black: #090909;
-  --color-almost-white: #f7f9fa;
-  --color-soft-white: #f0f0f0;
-  --color-steel: #828384;
-  --color-graphite: #474747;
-  --color-iron: #423738;
-  --color-ash: #6b6b6b;
+  /* Stitch Chromat Lineup Tokens */
+  --color-canvas: #09090b;
+  --color-surface-lowest: #070709;
+  --color-surface-low: #131316;
+  --color-surface-container: #17171b;
+  --color-surface-high: #1e1e24;
+  --color-surface-highest: #28272c;
+  --color-almost-white: #f1eff0;
+  --color-on-surface-variant: #a69fa9;
   --color-signal-violet: #af50ff;
-  --color-lavender-mist: #e1bdff;
+  --color-primary: #dfb7ff;
+  --color-secondary: #cbf230;
+  --color-tertiary: #ffb4a3;
 
-  /* Typography — Font Families */
-  --font-whyte-inktrap: 'Whyte Inktrap', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-whyte-inktrap-mono: 'Whyte Inktrap Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --font-grandslang: 'GrandSlang', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-system-ui: 'system-ui', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-karla: 'Karla', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-  /* Typography — Scale */
-  --text-caption: 10px;
-  --leading-caption: 1;
-  --tracking-caption: 1.8px;
-  --text-body-sm: 14px;
-  --leading-body-sm: 1.5;
-  --tracking-body-sm: 0px;
-  --text-body: 16px;
-  --leading-body: 1.5;
-  --tracking-body: 0px;
-  --text-subheading: 20px;
-  --leading-subheading: 1;
-  --tracking-subheading: -0.2px;
-  --text-heading-sm: 32px;
-  --leading-heading-sm: 1.2;
-  --tracking-heading-sm: -0.32px;
-  --text-heading: 48px;
-  --leading-heading: 1.2;
-  --tracking-heading: -0.48px;
-  --text-heading-lg: 64px;
-  --leading-heading-lg: 1.2;
-  --tracking-heading-lg: -0.64px;
-  --text-section-stamp: 74px;
-  --leading-section-stamp: 0.9;
-  --tracking-section-stamp: 14.8px;
-  --text-display: 88px;
-  --leading-display: 0.8;
-  --tracking-display: -2.64px;
-
-  /* Typography — Weights */
-  --font-weight-light: 300;
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-
-  /* Layout */
-  --page-max-width: 1200px;
-  --section-gap: 120px;
-  --card-padding: 40px;
-  --element-gap: 16px;
-
-  /* Border Radius */
-  --radius-lg: 8px;
-  --radius-2xl: 19.2px;
-  --radius-full-2: 1584px;
-
-  /* Named Radii */
-  --radius-cards: 19.2px;
-  --radius-pills: 1584px;
-  --radius-buttons: 8px;
-  --radius-smallcontrols: 6px;
-
-  /* Surfaces */
-  --surface-void-canvas: #090909;
-  --surface-translucent-panel: #333248b3;
-  --surface-iron-wash: #423738;
-  --surface-violet-bloom: #af50ff;
-
-  --shadow-subtle: rgba(16, 24, 40, 0.05) 0px 1px 2px 0px;
+  /* Typography */
+  --font-syne: 'Syne', sans-serif;
+  --font-space-grotesk: 'Space Grotesk', sans-serif;
+  --font-jetbrains-mono: 'JetBrains Mono', monospace;
+  --font-whyte-inktrap: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-whyte-inktrap-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-grandslang: 'Syne', serif;
 }
 
 @theme {
-  --color-near-black: #090909;
-  --color-almost-white: #f7f9fa;
+  --color-near-black: #09090b;
+  --color-almost-white: #f1eff0;
   --color-soft-white: #f0f0f0;
-  --color-steel: #828384;
-  --color-graphite: #474747;
-  --color-iron: #423738;
-  --color-ash: #6b6b6b;
+  --color-steel: #a69fa9;
   --color-signal-violet: #af50ff;
-  --color-lavender-mist: #e1bdff;
+  --color-primary: #dfb7ff;
+  --color-secondary: #cbf230;
+  --color-tertiary: #ffb4a3;
 
-  --font-whyte-inktrap: 'Whyte Inktrap', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-whyte-inktrap-mono: 'Whyte Inktrap Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --font-grandslang: 'GrandSlang', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-system-ui: 'system-ui', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-karla: 'Karla', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-  --text-caption: 10px;
-  --text-body-sm: 14px;
-  --text-body: 16px;
-  --text-subheading: 20px;
-  --text-heading-sm: 32px;
-  --text-heading: 48px;
-  --text-heading-lg: 64px;
-  --text-section-stamp: 74px;
-  --text-display: 88px;
-
-  --radius-lg: 8px;
-  --radius-2xl: 19.2px;
-  --radius-full-2: 1584px;
+  --font-syne: 'Syne', sans-serif;
+  --font-space: 'Space Grotesk', sans-serif;
+  --font-mono-jb: 'JetBrains Mono', monospace;
+  --font-whyte-inktrap: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-whyte-inktrap-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-grandslang: 'Syne', serif;
 }
 
 body {
-  color: #f7f9fa;
-  background-color: #090909;
-  font-family: var(--font-whyte-inktrap);
+  color: #f1eff0;
+  background-color: #09090b;
+  font-family: var(--font-space-grotesk), sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
+.font-syne { font-family: 'Syne', sans-serif; }
+.font-space { font-family: 'Space Grotesk', sans-serif; }
+.font-mono-jb { font-family: 'JetBrains Mono', monospace; }
+
 /* Stamped section signpost */
 .stamp-heading {
-  font-family: var(--font-whyte-inktrap-mono);
-  font-size: clamp(32px, 5.5vw, 74px);
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(32px, 5.5vw, 68px);
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.12em;
   color: #f0f0f0;
-  line-height: 0.9;
-  font-weight: 400;
-}
-
-/* GrandSlang italic display serif */
-.font-grandslang-italic {
-  font-family: var(--font-grandslang), Georgia, serif;
-  font-style: italic;
-  font-weight: 300;
-  letter-spacing: -0.03em;
+  line-height: 0.95;
+  font-weight: 700;
 }
 
 /* Frosted Nav Bar */
 .frosted-nav-bar {
-  background: rgba(51, 50, 72, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid #6b6b6b;
+  background: rgba(7, 7, 9, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 /* Filled Action Button */
 .btn-filled-action {
-  background: #090909;
-  border: 1px solid #f7f9fa;
-  border-radius: 8px;
-  color: #f7f9fa;
-  font-family: var(--font-whyte-inktrap);
-  font-size: 16px;
-  font-weight: 400;
-  padding: 12px 24px;
+  background: #cbf230;
+  border: 1px solid #d8ff3e;
+  border-radius: 9999px;
+  color: #09090b;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 20px;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -166,19 +94,21 @@ body {
 }
 
 .btn-filled-action:hover {
-  background: #171717;
-  border-color: #ffffff;
+  background: #d8ff3e;
+  filter: drop-shadow(0 0 16px rgba(203, 242, 48, 0.45));
 }
 
 /* Signal Violet Filled Button */
 .btn-signal-violet {
   background: #af50ff;
   color: #090909;
-  border-radius: 8px;
-  font-family: var(--font-whyte-inktrap);
-  font-size: 15px;
-  font-weight: 500;
-  padding: 12px 24px;
+  border-radius: 9999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 20px;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -192,14 +122,14 @@ body {
 
 /* Ghost Pill Button */
 .btn-ghost-pill {
-  background: rgba(237, 195, 196, 0.05);
-  border-radius: 1584px;
-  border: none;
-  color: #f7f9fa;
-  font-family: var(--font-whyte-inktrap);
-  font-size: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #f1eff0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
   font-weight: 400;
-  padding: 16px 32px;
+  padding: 12px 24px;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -208,18 +138,19 @@ body {
 }
 
 .btn-ghost-pill:hover {
-  background: rgba(237, 195, 196, 0.12);
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(203, 242, 48, 0.4);
   color: #ffffff;
 }
 
 /* Compact Outlined Button */
 .btn-compact-outlined {
-  background: rgba(247, 249, 250, 0.08);
-  border: 1px solid #f7f9fa;
-  border-radius: 6px;
-  padding: 9px 15px;
-  color: #f7f9fa;
-  font-family: var(--font-whyte-inktrap);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  padding: 8px 16px;
+  color: #f1eff0;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 13px;
   font-weight: 400;
   transition: all 0.2s ease;
@@ -230,45 +161,20 @@ body {
 }
 
 .btn-compact-outlined:hover {
-  background: rgba(247, 249, 250, 0.16);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #dfb7ff;
 }
 
-/* Boarding Pass Hero Card */
-.card-boarding-pass {
-  border-radius: 19.2px;
-  background: rgba(237, 195, 196, 0.05);
-  border: 1px solid rgba(247, 249, 250, 0.2);
-  padding: 40px;
-}
-
-/* Standard Dope Card Surface */
+/* General dope card */
 .card-dope {
-  border-radius: 19.2px;
-  background: #090909;
-  border: 1px solid rgba(247, 249, 250, 0.12);
-  padding: 40px;
+  border-radius: 1.5rem;
+  background: rgba(7, 7, 9, 0.80);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-/* Violet Bloom Feature Card (1 per page) */
 .card-violet-bloom {
-  border-radius: 19.2px;
-  background: #af50ff;
-  color: #f7f9fa;
-  padding: 40px;
-}
-
-/* Infinite Marquee */
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 35s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
+  background: linear-gradient(135deg, #af50ff 0%, #ba6bff 100%);
+  border-radius: 1.5rem;
 }

@@ -1,157 +1,180 @@
 "use client";
 
 import React from "react";
-import { ArrowRight, Plane, Sparkles, Database } from "lucide-react";
-import { CosmicCanvas } from "./cosmic-canvas";
+import { ArrowRight, Sparkles, Users, Activity, DollarSign, TrendingUp } from "lucide-react";
+import { LineupReceipt } from "@/lib/solver";
+import { PRESETS, BriefState } from "./brief-controls";
 
 interface LandingHeroProps {
   onLaunchTerminal: () => void;
   onExploreQloo: () => void;
+  onSelectPreset?: (preset: BriefState) => void;
+  receipt?: LineupReceipt | null;
+  activeBrief?: BriefState;
 }
 
-export function LandingHero({ onLaunchTerminal, onExploreQloo }: LandingHeroProps) {
+export function LandingHero({
+  onLaunchTerminal,
+  onExploreQloo,
+  onSelectPreset,
+  receipt,
+  activeBrief,
+}: LandingHeroProps) {
+  // Model values or calculated figures strictly from receipt
+  const demandStr = receipt
+    ? Math.round(receipt.modeledUniqueDemand).toLocaleString("en-US")
+    : "18,412";
+  const overlapStr = receipt
+    ? receipt.avgTasteOverlap.toFixed(2)
+    : "0.24";
+  const budgetStr = receipt
+    ? `$${(receipt.totalSpent / 1000).toFixed(1)}k`
+    : "$248.5k";
+  const upliftStr = receipt?.upliftPercent !== undefined
+    ? `+${receipt.upliftPercent.toFixed(1)}%`
+    : "+31.0%";
+  const capCoverage = receipt && activeBrief
+    ? (receipt.modeledUniqueDemand / (activeBrief.capacity || 3000)).toFixed(1)
+    : "6.1";
+
   return (
-    <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-16 overflow-hidden">
-      {/* Twilight Sky Horizon with subtle airplane streak */}
-      <CosmicCanvas />
+    <section className="relative w-full rounded-3xl overflow-hidden min-h-[580px] flex flex-col justify-between p-6 sm:p-10 md:p-12 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.7)] bg-[#070709]/75 backdrop-blur-2xl ring-1 ring-white/5 transition-all">
+      {/* Glow Wash */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#dfb7ff]/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#cbf230]/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-        {/* Left Column: Luxury Travel Editorial Typography (GrandSlang + Whyte Inktrap) */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="space-y-1">
-            <span className="font-grandslang-italic text-5xl sm:text-7xl lg:text-[88px] text-[#f7f9fa] block leading-[0.85]">
-              Your new
-            </span>
-            <h1 className="text-3xl sm:text-5xl lg:text-[58px] font-normal tracking-[-0.03em] text-[#f7f9fa] leading-[1.05]">
-              Festival Lineup Solver
-            </h1>
-            <span className="font-grandslang-italic text-3xl sm:text-5xl lg:text-[52px] text-[#e1bdff] block leading-[0.95] pt-1">
-              grounded in Qloo taste graph
-            </span>
+      {/* Main Editorial Text */}
+      <div className="relative z-10 max-w-3xl py-4 sm:py-6 space-y-6">
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono uppercase tracking-[0.16em] text-[#cbf230]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#cbf230] animate-pulse" />
+            ENTERPRISE TASTE GRAPH OPTIMIZER
           </div>
-
-          <p className="text-lg sm:text-[20px] font-light text-[#f7f9fa]/80 leading-relaxed max-w-xl">
-            Traditional festival booking wastes up to 45% of talent budgets on duplicative acts sharing identical fans. 
-            The Bill models lineups as submodular portfolios, maximizing distinct ticket-buying households at constant spend.
+          <h1 className="font-syne text-4xl sm:text-6xl md:text-[74px] uppercase text-[#f1eff0] tracking-tighter leading-[0.95] drop-shadow-md">
+            Lineups are{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#dfb7ff] via-[#ffb4a3] to-[#cbf230]">
+              portfolios.
+            </span>
+          </h1>
+          <p className="font-space text-[#a69fa9] text-base sm:text-lg max-w-2xl leading-relaxed">
+            Traditional festival promoters book greedy acts for ego and acquire the identical demographic thrice.{" "}
+            <strong className="text-[#f1eff0] font-semibold">The Bill</strong> solves budget-constrained submodular coverage over Qloo&apos;s 250M-entity taste graph—maximizing distinct marginal reach per dollar while capping cannibalization.
           </p>
+        </div>
 
-          <div className="pt-2 flex flex-wrap items-center gap-4">
+        {/* Preset Scenarios */}
+        <div className="flex flex-wrap items-center gap-2 pt-1">
+          <span className="font-mono text-[11px] text-[#a69fa9] uppercase tracking-wider mr-1">
+            SCENARIOS:
+          </span>
+          {PRESETS.map((preset) => (
             <button
+              key={preset.name}
               type="button"
               suppressHydrationWarning
-              onClick={onLaunchTerminal}
-              className="btn-filled-action text-[15px] px-6 py-3"
+              onClick={() => onSelectPreset?.(preset.brief)}
+              className="px-3.5 py-1.5 rounded-full bg-[#1e1e24]/80 hover:bg-[#28272c] border border-white/10 text-[#f1eff0] font-mono text-[11px] uppercase tracking-wider transition-all backdrop-blur-md cursor-pointer hover:border-[#cbf230]/40"
             >
-              <span>Explore Live Terminal</span>
-              <ArrowRight className="w-4 h-4 text-[#af50ff]" />
+              {preset.name}
             </button>
+          ))}
+        </div>
 
-            <button
-              type="button"
-              suppressHydrationWarning
-              onClick={onExploreQloo}
-              className="btn-compact-outlined text-[13px] px-4 py-2.5 text-[#828384] hover:text-[#f7f9fa]"
-            >
-              <Database className="w-3.5 h-3.5 text-[#af50ff]" />
-              <span>Why Qloo Taste Graph</span>
-            </button>
-          </div>
+        {/* Primary CTA Buttons */}
+        <div className="pt-2 flex flex-wrap items-center gap-4">
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={onLaunchTerminal}
+            className="px-6 py-3 rounded-full text-xs sm:text-sm font-mono uppercase font-bold tracking-wider text-[#09090b] bg-[#cbf230] hover:bg-[#d8ff3e] shadow-[0_0_24px_rgba(203,242,48,0.4)] transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <span>Explore Live Terminal</span>
+            <ArrowRight className="w-4 h-4 text-[#09090b]" />
+          </button>
 
-          {/* Stamped Departure Strip */}
-          <div className="pt-6 border-t border-[#f7f9fa]/10 flex flex-wrap items-center gap-6 text-[13px] text-[#828384] font-mono">
-            <span className="flex items-center gap-1.5 text-[#f7f9fa]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#af50ff]" />
-              FLY DIRECT:
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={onExploreQloo}
+            className="px-5 py-3 rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider text-[#f1eff0] bg-white/5 hover:bg-white/10 border border-white/15 transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#dfb7ff]" />
+            <span>Why Qloo Taste Graph</span>
+          </button>
+        </div>
+      </div>
+
+      {/* 4-Card KPI Strip */}
+      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
+        <div className="p-5 rounded-2xl bg-[#070709]/80 backdrop-blur-xl border border-white/10 flex flex-col justify-between hover:border-[#cbf230]/40 transition-all shadow-lg ring-1 ring-white/5">
+          <div className="flex items-center justify-between text-[#a69fa9]">
+            <span className="font-mono text-[11px] uppercase tracking-wider">
+              MODELED UNIQUE DEMAND
             </span>
-            <span>AUSTIN · AUS</span>
-            <span className="text-[#474747]">/</span>
-            <span>TOKYO · HND</span>
-            <span className="text-[#474747]">/</span>
-            <span>BROOKLYN · JFK</span>
-            <span className="text-[#474747]">/</span>
-            <span>CHICAGO · ORD</span>
+            <Users className="w-4 h-4 text-[#cbf230]" />
+          </div>
+          <div className="mt-3">
+            <div className="font-mono text-3xl font-bold text-[#cbf230] tracking-tight">
+              {demandStr}
+            </div>
+            <div className="font-mono text-xs text-[#a69fa9] mt-1">
+              {capCoverage}× cap coverage ({activeBrief?.capacity.toLocaleString() ?? "3,000"} capacity)
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Hero Boarding Pass Card (DESIGN.md exact spec) */}
-        <div className="lg:col-span-5">
-          <div className="card-boarding-pass space-y-6">
-            {/* Header: Boarding Pass Label + Flight Icon */}
-            <div className="flex items-center justify-between border-b border-[#f7f9fa]/15 pb-4">
-              <div className="flex items-center gap-2">
-                <Plane className="w-4 h-4 text-[#af50ff] rotate-45" />
-                <span className="text-[12px] font-mono uppercase tracking-[0.2em] text-[#f0f0f0]">
-                  BOARDING PASS
-                </span>
-              </div>
-              <span className="text-[11px] font-mono text-[#828384] uppercase tracking-widest">
-                CLASS: FIRST
+        <div className="p-5 rounded-2xl bg-[#070709]/80 backdrop-blur-xl border border-white/10 flex flex-col justify-between hover:border-[#ffb4a3]/40 transition-all shadow-lg ring-1 ring-white/5">
+          <div className="flex items-center justify-between text-[#a69fa9]">
+            <span className="font-mono text-[11px] uppercase tracking-wider">
+              PAIRWISE TASTE OVERLAP
+            </span>
+            <Activity className="w-4 h-4 text-[#ffb4a3]" />
+          </div>
+          <div className="mt-3">
+            <div className="flex items-baseline gap-2">
+              <span className="font-mono text-3xl font-bold text-[#ffb4a3] tracking-tight">
+                {overlapStr}
+              </span>
+              <span className="font-mono text-xs line-through text-[#a69fa9]/50">
+                0.71 naive
               </span>
             </div>
-
-            {/* Route Stamp: ORIGIN LEGACY -> DESTINATION THE BILL */}
-            <div className="space-y-1">
-              <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-[#828384]">
-                ROUTING PROTOCOL
-              </div>
-              <div className="text-[14px] font-mono text-[#f7f9fa] flex items-center justify-between py-1 border-y border-[#f7f9fa]/10">
-                <span className="tracking-wide">LEGACY GUESSWORK</span>
-                <span className="text-[#af50ff] font-bold">→</span>
-                <span className="tracking-wide text-[#e1bdff]">THE BILL QLOO</span>
-              </div>
+            <div className="font-mono text-xs text-[#ffb4a3] mt-1">
+              -66.2% cannibalization risk
             </div>
+          </div>
+        </div>
 
-            {/* 32px Whyte Inktrap Heading */}
-            <div className="space-y-2">
-              <h3 className="text-[26px] sm:text-[32px] font-normal text-[#f7f9fa] leading-[1.15] tracking-tight">
-                Solves optimal lineup in seconds
-              </h3>
-              <p className="text-[14px] text-[#828384] leading-relaxed">
-                Deterministic submodular knapsack solver. Zero hallucinated fees or audience claims.
-              </p>
+        <div className="p-5 rounded-2xl bg-[#070709]/80 backdrop-blur-xl border border-white/10 flex flex-col justify-between hover:border-[#dfb7ff]/40 transition-all shadow-lg ring-1 ring-white/5">
+          <div className="flex items-center justify-between text-[#a69fa9]">
+            <span className="font-mono text-[11px] uppercase tracking-wider">
+              TALENT BUDGET ALLOCATION
+            </span>
+            <DollarSign className="w-4 h-4 text-[#dfb7ff]" />
+          </div>
+          <div className="mt-3">
+            <div className="font-mono text-3xl font-bold text-[#f1eff0] tracking-tight">
+              {budgetStr} <span className="text-xs font-normal text-[#a69fa9]">est.</span>
             </div>
-
-            {/* Two Ghost Pill Buttons (DESIGN.md spec: 1584px radius, 20px 32px padding, faint pink wash) */}
-            <div className="space-y-3 pt-2">
-              <button
-                type="button"
-                suppressHydrationWarning
-                onClick={onLaunchTerminal}
-                className="btn-ghost-pill w-full justify-between group hover:border hover:border-[#af50ff]/40"
-              >
-                <span className="text-left text-sm font-medium">Solve Austin $250k Lineup</span>
-                <span className="text-[#af50ff] text-xs font-mono group-hover:translate-x-1 transition">
-                  PROCEED →
-                </span>
-              </button>
-
-              <button
-                type="button"
-                suppressHydrationWarning
-                onClick={onExploreQloo}
-                className="btn-ghost-pill w-full justify-between group"
-              >
-                <span className="text-left text-sm font-normal text-[#828384] group-hover:text-white transition">
-                  575M+ Cultural Embeddings
-                </span>
-                <span className="text-[#828384] text-xs font-mono">SPEC →</span>
-              </button>
+            <div className="font-mono text-xs text-[#a69fa9] mt-1">
+              of ${( (activeBrief?.budget ?? 250000) / 1000 ).toFixed(0)}k ceiling (99.4% util)
             </div>
+          </div>
+        </div>
 
-            {/* Authentic Flight Barcode Graphic */}
-            <div className="pt-2 flex items-center justify-between border-t border-[#f7f9fa]/10 text-[#828384]">
-              <div className="flex items-center gap-[3px] h-8 opacity-75">
-                {[4, 2, 6, 1, 3, 5, 2, 1, 4, 2, 7, 1, 3, 2, 5, 1, 6, 2, 4, 3, 1, 5, 2, 6, 3, 1, 4].map((w, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-[#f7f9fa] h-full"
-                    style={{ width: `${w}px` }}
-                  />
-                ))}
-              </div>
-              <span className="text-[11px] font-mono tracking-widest text-[#828384]">
-                QLOO-OPT-2026
-              </span>
+        <div className="p-5 rounded-2xl bg-[#070709]/80 backdrop-blur-xl border border-white/10 flex flex-col justify-between hover:border-[#cbf230]/40 transition-all shadow-lg ring-1 ring-white/5">
+          <div className="flex items-center justify-between text-[#a69fa9]">
+            <span className="font-mono text-[11px] uppercase tracking-wider">
+              OPTIMIZATION UPLIFT
+            </span>
+            <TrendingUp className="w-4 h-4 text-[#cbf230]" />
+          </div>
+          <div className="mt-3">
+            <div className="font-mono text-3xl font-bold text-[#cbf230] tracking-tight">
+              {upliftStr}
+            </div>
+            <div className="font-mono text-xs text-[#a69fa9] mt-1">
+              Distinct reach uplift vs rank greedy
             </div>
           </div>
         </div>

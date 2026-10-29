@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Header } from "@/components/header";
 import { LandingHero } from "@/components/landing-hero";
+import { FluidShader } from "@/components/fluid-shader";
 import { MarqueeTicker } from "@/components/marquee-ticker";
 import { AccordionFeatures } from "@/components/accordion-features";
 import { ShowcaseGrid } from "@/components/showcase-grid";
@@ -36,7 +37,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [apiLatency, setApiLatency] = useState<number | null>(null);
 
-  // Modals
   const [isMatrixOpen, setIsMatrixOpen] = useState<boolean>(false);
   const [isTimetableOpen, setIsTimetableOpen] = useState<boolean>(false);
   const [isPosterOpen, setIsPosterOpen] = useState<boolean>(false);
@@ -98,7 +98,11 @@ export default function Home() {
   const scrollToFeatures = () => featuresRef.current?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <div className="min-h-screen bg-[#090909] text-[#f7f9fa] flex flex-col font-sans selection:bg-[#af50ff]/30" suppressHydrationWarning>
+    <div className="min-h-screen bg-[#09090b] text-[#f1eff0] flex flex-col font-sans selection:bg-[#cbf230] selection:text-[#09090b] relative" suppressHydrationWarning>
+      {/* Full Page Ambient WebGL Fluid Shader with reduced motion respect */}
+      <FluidShader />
+
+      {/* Centered Floating Pill Navbar */}
       <Header
         onOpenMatrix={() => setIsMatrixOpen(true)}
         onOpenTimetable={() => setIsTimetableOpen(true)}
@@ -109,15 +113,23 @@ export default function Home() {
         hasReceipt={!!receipt}
       />
 
-      <main className="flex-1 max-w-[1200px] w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-20 pb-20">
-        {/* Hero Section (Boarding Pass & Editorial Typography) */}
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-32 space-y-16">
+        {/* Hero Section */}
         <LandingHero
           onLaunchTerminal={scrollToTerminal}
           onExploreQloo={scrollToQloo}
+          onSelectPreset={handleSelectPreset}
+          receipt={receipt}
+          activeBrief={brief}
         />
 
         {/* Marquee Ticker */}
         <MarqueeTicker />
+
+        {/* Qloo Intelligence Architecture Suite */}
+        <div ref={qlooRef}>
+          <QlooShowcase />
+        </div>
 
         {/* Feature Disciplines Accordion */}
         <div ref={featuresRef}>
@@ -130,11 +142,6 @@ export default function Home() {
           onScrollToTerminal={scrollToTerminal}
         />
 
-        {/* Qloo Intelligence Showcase */}
-        <div ref={qlooRef}>
-          <QlooShowcase />
-        </div>
-
         {/* Live Solver Terminal Anchor */}
         <div ref={terminalRef} className="pt-6 space-y-8">
           <div className="overflow-hidden">
@@ -143,27 +150,8 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* Telemetry Status Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs p-4 rounded-[8px] bg-[#090909] border border-[#f7f9fa]/12 font-mono">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#af50ff] animate-pulse" />
-              <span className="text-[#f7f9fa] uppercase">PORTFOLIO SOLVER ACTIVE</span>
-              <span className="text-[#474747]">&bull;</span>
-              <span className="text-[#828384]">ENDPOINT: /api/solve</span>
-            </div>
-            <div className="flex items-center gap-4 text-[#828384]">
-              {apiLatency !== null && (
-                <span className="text-[#af50ff] flex items-center gap-1 font-medium">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  STATUS: 200 OK ({apiLatency}ms)
-                </span>
-              )}
-              <span className="hidden sm:inline">DATA: LIVE QLOO EMBEDDINGS</span>
-            </div>
-          </div>
-
           {error && (
-            <div className="p-4 rounded-[8px] bg-[#090909] border border-red-500/50 text-xs text-red-300 font-mono flex items-center gap-2.5">
+            <div className="p-4 rounded-[8px] bg-[#09090b] border border-red-500/50 text-xs text-red-300 font-mono flex items-center gap-2.5">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -182,14 +170,14 @@ export default function Home() {
 
         {isLoading && !receipt && (
           <div className="card-dope p-12 text-center space-y-4">
-            <div className="w-10 h-10 mx-auto rounded-lg bg-[#af50ff]/10 border border-[#af50ff]/30 flex items-center justify-center">
-              <Activity className="w-5 h-5 text-[#af50ff] animate-spin" />
+            <div className="w-10 h-10 mx-auto rounded-lg bg-[#cbf230]/10 border border-[#cbf230]/30 flex items-center justify-center">
+              <Activity className="w-5 h-5 text-[#cbf230] animate-spin" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-base font-normal text-[#f7f9fa]">
+              <h3 className="text-base font-normal text-[#f1eff0]">
                 Querying Qloo Cultural Taste Graph...
               </h3>
-              <p className="text-xs text-[#828384] max-w-md mx-auto font-mono">
+              <p className="text-xs text-[#a69fa9] max-w-md mx-auto font-mono">
                 Computing pairwise cosine tasteOverlap and solving submodular knapsack.
               </p>
             </div>
@@ -201,10 +189,10 @@ export default function Home() {
             <Comparison receipt={receipt} />
             <section className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-mono text-[#828384] uppercase tracking-wider">
-                  FESTIVAL LINEUP POSTER & STAGE BREAKDOWN
+                <h3 className="text-sm font-mono text-[#a69fa9] uppercase tracking-wider">
+                  THE CURATED BILL & STAGE BREAKDOWN
                 </h3>
-                <span className="text-xs text-[#828384] font-mono">
+                <span className="text-xs text-[#a69fa9] font-mono">
                   Click slot to inspect Qloo tasteOverlap
                 </span>
               </div>
@@ -219,37 +207,40 @@ export default function Home() {
         )}
       </main>
 
-      {/* Coordinate Stamp Footer (DESIGN.md exact spec) */}
+      {/* Floating Dock Benchmark Bar */}
+      <aside className="fixed bottom-4 left-4 right-4 z-40 max-w-[1440px] mx-auto pointer-events-none">
+        <div className="bg-[#070709]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-5 py-2.5 shadow-2xl pointer-events-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-[#a69fa9] font-mono text-xs">
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-[#cbf230] shadow-[0_0_8px_#cbf230]" />
+            <span>
+              API ENDPOINT: <code className="text-[#f1eff0] bg-white/5 px-1.5 py-0.5 rounded">POST /api/solve</code>
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            {apiLatency !== null && (
+              <span>
+                Execution: <strong className="text-[#cbf230]">{apiLatency}ms</strong>
+              </span>
+            )}
+            <span>Seed: <code className="text-[#f1eff0]">0x8F9C4A2</code></span>
+            <span className="inline-flex items-center gap-1 text-[#cbf230] font-bold">
+              <CheckCircle2 className="w-3.5 h-3.5" /> QLOO READY
+            </span>
+          </div>
+        </div>
+      </aside>
+
       <CoordinateFooter market={brief.market} />
 
-      {/* Modals */}
       {receipt && (
         <>
-          <MatrixModal
-            receipt={receipt}
-            isOpen={isMatrixOpen}
-            onClose={() => setIsMatrixOpen(false)}
-          />
-          <TimetableModal
-            receipt={receipt}
-            isOpen={isTimetableOpen}
-            onClose={() => setIsTimetableOpen(false)}
-          />
-          <PosterModal
-            receipt={receipt}
-            market={brief.market}
-            isOpen={isPosterOpen}
-            onClose={() => setIsPosterOpen(false)}
-          />
+          <MatrixModal receipt={receipt} isOpen={isMatrixOpen} onClose={() => setIsMatrixOpen(false)} />
+          <TimetableModal receipt={receipt} isOpen={isTimetableOpen} onClose={() => setIsTimetableOpen(false)} />
+          <PosterModal receipt={receipt} market={brief.market} isOpen={isPosterOpen} onClose={() => setIsPosterOpen(false)} />
         </>
       )}
 
-      {/* Attribution Drawer */}
-      <Drawer
-        slot={selectedSlot}
-        onClose={() => setSelectedSlot(null)}
-        onOverrideFee={handleOverrideFee}
-      />
+      <Drawer slot={selectedSlot} onClose={() => setSelectedSlot(null)} onOverrideFee={handleOverrideFee} />
     </div>
   );
 }

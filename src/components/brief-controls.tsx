@@ -12,6 +12,53 @@ export interface BriefState {
   seeds: string[];
 }
 
+export const PRESETS: Array<{ name: string; brief: BriefState }> = [
+  {
+    name: "Austin 5k · $250k",
+    brief: {
+      market: "Austin",
+      budget: 250000,
+      capacity: 5000,
+      actCount: 8,
+      requireLocal: true,
+      seeds: ["Phoebe Bridgers", "boygenius", "Lucy Dacus"],
+    },
+  },
+  {
+    name: "Tokyo 6.5k · $320k",
+    brief: {
+      market: "Tokyo",
+      budget: 320000,
+      capacity: 6500,
+      actCount: 8,
+      requireLocal: true,
+      seeds: ["Massive Attack", "Portishead", "Cornelius"],
+    },
+  },
+  {
+    name: "Brooklyn 3.5k · $180k",
+    brief: {
+      market: "New York",
+      budget: 180000,
+      capacity: 3500,
+      actCount: 6,
+      requireLocal: false,
+      seeds: ["Big Thief", "Adrianne Lenker", "Faye Webster"],
+    },
+  },
+  {
+    name: "Chicago 8k · $350k",
+    brief: {
+      market: "Chicago",
+      budget: 350000,
+      capacity: 8000,
+      actCount: 10,
+      requireLocal: true,
+      seeds: ["Soccer Mommy", "Indigo De Souza", "The Beths"],
+    },
+  },
+];
+
 interface BriefControlsProps {
   brief: BriefState;
   onChange: (updated: Partial<BriefState>) => void;
@@ -27,44 +74,7 @@ export function BriefControls({
   onSolve,
   isLoading,
 }: BriefControlsProps) {
-  const presets = [
-    {
-      name: "Austin Indie ($250k)",
-      market: "Austin",
-      budget: 250000,
-      capacity: 5000,
-      actCount: 8,
-      requireLocal: true,
-      seeds: ["Phoebe Bridgers", "boygenius", "Lucy Dacus"],
-    },
-    {
-      name: "Tokyo Shibuya ($320k)",
-      market: "Tokyo",
-      budget: 320000,
-      capacity: 6500,
-      actCount: 8,
-      requireLocal: true,
-      seeds: ["Massive Attack", "Portishead", "Cornelius"],
-    },
-    {
-      name: "Brooklyn Warehouse ($180k)",
-      market: "New York",
-      budget: 180000,
-      capacity: 3500,
-      actCount: 6,
-      requireLocal: false,
-      seeds: ["Big Thief", "Adrianne Lenker", "Faye Webster"],
-    },
-    {
-      name: "Chicago Lakefront ($350k)",
-      market: "Chicago",
-      budget: 350000,
-      capacity: 8000,
-      actCount: 10,
-      requireLocal: true,
-      seeds: ["Soccer Mommy", "Indigo De Souza", "The Beths"],
-    },
-  ];
+  const presets = PRESETS;
 
   return (
     <div className="card-dope p-6 sm:p-10 space-y-8">
@@ -87,7 +97,7 @@ export function BriefControls({
         {/* Presets in Ghost Pill style */}
         <div className="flex flex-wrap items-center gap-2">
           {presets.map((p) => {
-            const isSelected = brief.market.toLowerCase() === p.market.toLowerCase();
+            const isSelected = brief.market.toLowerCase() === p.brief.market.toLowerCase();
             return (
               <button
                 key={p.name}
@@ -96,16 +106,16 @@ export function BriefControls({
                 disabled={isLoading}
                 onClick={() => {
                   if (onSelectPreset) {
-                    onSelectPreset(p);
+                    onSelectPreset(p.brief);
                   } else {
-                    onChange(p);
+                    onChange(p.brief);
                   }
                 }}
                 className={`text-[12px] font-mono px-3.5 py-1.5 rounded-full transition border ${
                   isSelected
                     ? "bg-[#af50ff] text-[#090909] font-medium border-[#af50ff]"
                     : "bg-[#090909] text-[#828384] border-[#f7f9fa]/15 hover:border-[#f7f9fa]/40 hover:text-[#f7f9fa]"
-                } disabled:opacity-40`}
+                } disabled:opacity-40 cursor-pointer`}
               >
                 {p.name}
               </button>
