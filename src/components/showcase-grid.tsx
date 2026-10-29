@@ -75,9 +75,6 @@ export function ShowcaseGrid({ onSelectPreset, onScrollToTerminal }: ShowcaseGri
 
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-1">
-          <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#af50ff]">
-            VERIFIED FLIGHT MANIFESTS
-          </div>
           <p className="text-[15px] font-light text-[#828384] max-w-xl">
             Real portfolio solves benchmarked against naive booking. Click any flight route to load its parameters into the live solver.
           </p>

@@ -113,12 +113,9 @@ export function Poster({
     <div className="space-y-6">
       {/* TIER 1: BLUE CHIP HEADLINERS */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between border-b border-white/10 pb-2">
+        <div className="border-b border-white/10 pb-2">
           <span className="font-mono text-[11px] text-[#dfb7ff] uppercase tracking-widest font-semibold">
             TIER 1 · BLUE-CHIP HEADLINERS
-          </span>
-          <span className="font-mono text-[10px] text-[#a69fa9] uppercase">
-            PRIMARY ATTENDANCE DRIVERS
           </span>
         </div>
         <div className="space-y-3">
@@ -129,12 +126,9 @@ export function Poster({
       {/* TIER 2: ASYMMETRIC GROWTH MID-TIER */}
       {tier2.length > 0 && (
         <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2">
+          <div className="border-b border-white/10 pb-2">
             <span className="font-mono text-[11px] text-[#cbf230] uppercase tracking-widest font-semibold">
               TIER 2 · ASYMMETRIC GROWTH MID-TIER
-            </span>
-            <span className="font-mono text-[10px] text-[#a69fa9] uppercase">
-              HIGH MARGINAL EXPANSION
             </span>
           </div>
           <div className="space-y-3">
@@ -146,12 +140,9 @@ export function Poster({
       {/* TIER 3: SEED TALENT & OPENERS */}
       {tier3.length > 0 && (
         <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2">
+          <div className="border-b border-white/10 pb-2">
             <span className="font-mono text-[11px] text-[#ffb4a3] uppercase tracking-widest font-semibold">
               TIER 3 · SEED TALENT & LOCAL OPENERS
-            </span>
-            <span className="font-mono text-[10px] text-[#a69fa9] uppercase">
-              SUBCULTURE DISCOVERY
             </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

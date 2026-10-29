@@ -20,9 +20,6 @@ export function Comparison({ receipt }: ComparisonProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#f7f9fa]/10 gap-4">
         <div className="space-y-1">
-          <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#af50ff]">
-            BENCHMARK EVALUATION
-          </div>
           <h3 className="text-xl sm:text-2xl font-normal text-[#f7f9fa] tracking-tight">
             Crowdfolio vs. Naive Booking
           </h3>

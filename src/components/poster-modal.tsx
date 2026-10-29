@@ -83,9 +83,6 @@ export function PosterModal({ receipt, market, isOpen, onClose }: PosterModalPro
         <div className="p-8 sm:p-12 rounded-[16px] bg-[#090909] border border-[#f7f9fa]/15 text-center space-y-8 relative overflow-hidden">
           {/* Poster Title */}
           <div className="space-y-2 pt-2">
-            <div className="text-[11px] font-mono tracking-[0.25em] text-[#af50ff] uppercase">
-              QLOO CULTURAL TASTE GRAPH PRESENTS
-            </div>
             <h1 className="text-4xl sm:text-6xl font-normal tracking-[-0.03em] text-[#f7f9fa] uppercase">
               CROWDFOLIO
             </h1>

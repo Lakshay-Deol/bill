@@ -29,10 +29,6 @@ export function TimetableModal({ receipt, isOpen, onClose }: TimetableModalProps
         {/* Header */}
         <div className="flex items-start justify-between border-b border-[#f7f9fa]/12 pb-5">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#af50ff] mb-1">
-              <Calendar className="w-4 h-4" />
-              <span>RUN OF SHOW // FLIGHT SCHEDULE</span>
-            </div>
             <h2 className="text-xl sm:text-2xl font-normal text-[#f7f9fa] tracking-tight">
               Festival Timetable & Set Schedule
             </h2>

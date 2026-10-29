@@ -90,19 +90,14 @@ export function BriefControls({
 
   return (
     <section id="component-suite" className="p-6 sm:p-8 rounded-3xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 ring-1 ring-white/5 space-y-8">
-      {/* Header (eyebrows removed) */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-white/10">
-        <div>
-          <h2 className="font-syne text-2xl sm:text-3xl uppercase tracking-tight text-[#f1eff0] font-bold">
-            Crowdfolio Component Suite
-          </h2>
-          <p className="font-space text-sm text-[#a69fa9] mt-1">
-            Live UI widgets and primitives powering real-time greedy submodular optimization.
-          </p>
-        </div>
-        <span className="font-mono text-xs text-[#a69fa9] bg-[#17171b] px-3 py-1 rounded-full border border-white/10 self-start sm:self-auto">
-          7 LIVE INTERACTIVE ATOMS
-        </span>
+      {/* Header */}
+      <div className="pb-6 border-b border-white/10">
+        <h2 className="font-syne text-2xl sm:text-3xl uppercase tracking-tight text-[#f1eff0] font-bold">
+          Crowdfolio Component Suite
+        </h2>
+        <p className="font-space text-sm text-[#a69fa9] mt-1">
+          Live UI widgets and primitives powering real-time greedy submodular optimization.
+        </p>
       </div>
 
       {/* 3 Widgets Grid (eyebrow tags removed) */}

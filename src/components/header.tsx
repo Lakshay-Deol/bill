@@ -54,20 +54,14 @@ export function Header({
       }`}
     >
       <div className="max-w-[1440px] mx-auto flex items-center justify-between">
-        {/* Top Left: Project Brandmark */}
+        {/* Top Left: Simple Brand Heading matching text */}
         <div className="pointer-events-auto flex items-center">
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#070709]/85 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)] ring-1 ring-white/5 hover:border-[#cbf230]/50 transition-all cursor-pointer group"
+            className="font-syne text-lg sm:text-xl font-bold uppercase tracking-tight text-[#f1eff0] hover:text-[#cbf230] transition-colors cursor-pointer"
           >
-            <span className="w-2 h-2 rounded-full bg-[#cbf230] group-hover:shadow-[0_0_8px_#cbf230] transition-all animate-pulse" />
-            <span className="font-syne text-xs uppercase tracking-wider font-extrabold text-[#f1eff0]">
-              CROWDFOLIO
-            </span>
-            <span className="text-[10px] font-mono text-[#a69fa9] border-l border-white/10 pl-2 hidden sm:inline">
-              QLOO ENGINE
-            </span>
+            Crowdfolio
           </button>
         </div>
 

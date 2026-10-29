@@ -51,9 +51,6 @@ export function AccordionFeatures() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         {/* Left Column: Context in Whyte Inktrap */}
         <div className="lg:col-span-4 space-y-3">
-          <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#af50ff]">
-            SYSTEM DESIGN SPEC
-          </div>
           <h3 className="text-2xl sm:text-3xl font-normal text-[#f7f9fa] tracking-tight">
             Six Mathematical Disciplines
           </h3>

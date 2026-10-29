@@ -147,16 +147,11 @@ export function QlooShowcase() {
 
       {/* Interactive Taste Space Cluster Inspector */}
       <div className="p-5 rounded-2xl bg-[#131316]/90 border border-white/10 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/10">
-          <div className="flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-[#cbf230]" />
-            <h3 className="font-syne text-sm font-bold uppercase text-[#f1eff0]">
-              512-Dimensional Taste Projection Clusters
-            </h3>
-          </div>
-          <span className="font-mono text-[10px] text-[#a69fa9]">
-            SELECT A GENRE MANIFOLD TO INSPECT TASTEOVERLAP COVARIANCE
-          </span>
+        <div className="flex items-center gap-2 pb-3 border-b border-white/10">
+          <Cpu className="w-4 h-4 text-[#cbf230]" />
+          <h3 className="font-syne text-sm font-bold uppercase text-[#f1eff0]">
+            512-Dimensional Taste Projection Clusters
+          </h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

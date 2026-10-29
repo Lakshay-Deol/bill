@@ -42,13 +42,9 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#f7f9fa]/10 pb-4">
         <div className="flex items-center gap-2">
           <MessageSquare className="w-4 h-4 text-[#af50ff]" />
-          <span className="text-xs font-mono uppercase tracking-[0.14em] text-[#f7f9fa]">
-            NATURAL LANGUAGE CONSTRAINT AGENT
+          <span className="text-sm font-syne font-bold text-[#f7f9fa]">
+            Constraint Assistant
           </span>
-        </div>
-        <div className="flex items-center gap-1.5 text-xs font-mono text-[#828384]">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#af50ff]" />
-          <span>ZERO HALLUCINATIONS GROUNDED</span>
         </div>
       </div>
 

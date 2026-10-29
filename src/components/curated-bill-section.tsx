@@ -44,7 +44,7 @@ export function CuratedBillSection({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-5 rounded-2xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 ring-1 ring-white/5">
         <div className="space-y-1">
           <h2 className="font-syne text-2xl uppercase tracking-tight text-[#f1eff0]">
-            The Curated Bill
+            The Curated Lineup
           </h2>
           <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] text-[#a69fa9]">
             <span className="flex items-center gap-1">

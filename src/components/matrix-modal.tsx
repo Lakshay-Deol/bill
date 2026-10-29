@@ -21,10 +21,6 @@ export function MatrixModal({ receipt, isOpen, onClose }: MatrixModalProps) {
         {/* Modal Header */}
         <div className="flex items-start justify-between border-b border-[#f7f9fa]/12 pb-5">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#af50ff]">
-              <Network className="w-4 h-4" />
-              <span>QLOO TASTE GRAPH // PAIRWISE AFFINITY MATRIX</span>
-            </div>
             <h2 className="text-xl sm:text-2xl font-normal text-[#f7f9fa] tracking-tight">
               Taste Overlap Inspector
             </h2>
