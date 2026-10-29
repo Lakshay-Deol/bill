@@ -5,20 +5,16 @@ import { Header } from "@/components/header";
 import { LandingHero } from "@/components/landing-hero";
 import { FluidShader } from "@/components/fluid-shader";
 import { MarqueeTicker } from "@/components/marquee-ticker";
-import { AccordionFeatures } from "@/components/accordion-features";
-import { ShowcaseGrid } from "@/components/showcase-grid";
 import { QlooShowcase } from "@/components/qloo-showcase";
+import { CuratedBillSection } from "@/components/curated-bill-section";
 import { BriefControls, BriefState } from "@/components/brief-controls";
-import { Poster } from "@/components/poster";
-import { Comparison } from "@/components/comparison";
 import { Drawer } from "@/components/drawer";
-import { AgentPanel } from "@/components/chat/agent-panel";
 import { MatrixModal } from "@/components/matrix-modal";
 import { TimetableModal } from "@/components/timetable-modal";
 import { PosterModal } from "@/components/poster-modal";
 import { CoordinateFooter } from "@/components/coordinate-footer";
 import { LineupReceipt, BookedSlot } from "@/lib/solver";
-import { AlertCircle, CheckCircle2, Activity } from "lucide-react";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 export default function Home() {
   const [brief, setBrief] = useState<BriefState>({
@@ -41,9 +37,10 @@ export default function Home() {
   const [isTimetableOpen, setIsTimetableOpen] = useState<boolean>(false);
   const [isPosterOpen, setIsPosterOpen] = useState<boolean>(false);
 
-  const terminalRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
   const qlooRef = useRef<HTMLDivElement>(null);
-  const featuresRef = useRef<HTMLDivElement>(null);
+  const billRef = useRef<HTMLDivElement>(null);
+  const suiteRef = useRef<HTMLDivElement>(null);
 
   const executeSolve = useCallback(
     async (targetBrief?: BriefState, targetOverrides?: Record<string, number>) => {
@@ -81,82 +78,82 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSelectPreset = (p: BriefState) => { setBrief(p); executeSolve(p); };
-  const handleApplyPatch = (p: Partial<BriefState>) => {
-    const updated = { ...brief, ...p };
-    setBrief(updated);
-    executeSolve(updated);
+  const handleSelectPreset = (p: BriefState) => {
+    setBrief(p);
+    executeSolve(p);
   };
+
   const handleOverrideFee = (actId: string, fee: number) => {
     const updated = { ...feeOverrides, [actId]: fee };
     setFeeOverrides(updated);
     executeSolve(brief, updated);
   };
 
-  const scrollToTerminal = () => terminalRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToHero = () => heroRef.current?.scrollIntoView({ behavior: "smooth" });
   const scrollToQloo = () => qlooRef.current?.scrollIntoView({ behavior: "smooth" });
-  const scrollToFeatures = () => featuresRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBill = () => billRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToSuite = () => suiteRef.current?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-[#f1eff0] flex flex-col font-sans selection:bg-[#cbf230] selection:text-[#09090b] relative" suppressHydrationWarning>
-      {/* Full Page Ambient WebGL Fluid Shader with reduced motion respect */}
+    <div className="min-h-screen bg-[#09090b] text-[#f1eff0] flex flex-col font-sans selection:bg-[#cbf230] selection:text-[#09090b] relative">
+      {/* Standalone WebGL Fluid Shader matching Stitch screen */}
       <FluidShader />
 
-      {/* Centered Floating Pill Navbar */}
+      {/* Floating Pill Navbar */}
       <Header
         onOpenMatrix={() => setIsMatrixOpen(true)}
         onOpenTimetable={() => setIsTimetableOpen(true)}
         onOpenPoster={() => setIsPosterOpen(true)}
-        onScrollToTerminal={scrollToTerminal}
+        onScrollToTerminal={scrollToSuite}
         onScrollToQloo={scrollToQloo}
-        onScrollToFeatures={scrollToFeatures}
+        onScrollToFeatures={scrollToQloo}
+        onScrollToBill={scrollToBill}
         hasReceipt={!!receipt}
       />
 
       <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-32 space-y-16">
-        {/* Hero Section */}
-        <LandingHero
-          onLaunchTerminal={scrollToTerminal}
-          onExploreQloo={scrollToQloo}
-          onSelectPreset={handleSelectPreset}
-          receipt={receipt}
-          activeBrief={brief}
-        />
+        {/* Section 1 & 2: Hero Section */}
+        <div ref={heroRef} id="hero">
+          <LandingHero
+            onLaunchTerminal={scrollToSuite}
+            onExploreQloo={scrollToQloo}
+            onSelectPreset={handleSelectPreset}
+            receipt={receipt}
+            activeBrief={brief}
+          />
+        </div>
 
         {/* Marquee Ticker */}
         <MarqueeTicker />
 
-        {/* Qloo Intelligence Architecture Suite */}
-        <div ref={qlooRef}>
+        {/* Section 3: Qloo Intelligence Architecture Suite */}
+        <div ref={qlooRef} id="qloo-architecture">
           <QlooShowcase />
         </div>
 
-        {/* Feature Disciplines Accordion */}
-        <div ref={featuresRef}>
-          <AccordionFeatures />
-        </div>
-
-        {/* Showcase Grid of Benchmark Routes */}
-        <ShowcaseGrid
-          onSelectPreset={handleSelectPreset}
-          onScrollToTerminal={scrollToTerminal}
-        />
-
-        {/* Live Solver Terminal Anchor */}
-        <div ref={terminalRef} className="pt-6 space-y-8">
-          <div className="overflow-hidden">
-            <h2 className="stamp-heading tracking-[0.2em] text-[#f0f0f0] select-none">
-              TERMINAL SOLVER
-            </h2>
+        {error && (
+          <div className="p-4 rounded-xl bg-[#09090b] border border-red-500/50 text-xs text-red-300 font-mono flex items-center gap-2.5">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <span>{error}</span>
           </div>
+        )}
 
-          {error && (
-            <div className="p-4 rounded-[8px] bg-[#09090b] border border-red-500/50 text-xs text-red-300 font-mono flex items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+        {/* Section 4: The Curated Bill & Overlap Heatmap */}
+        {receipt && (
+          <div ref={billRef}>
+            <CuratedBillSection
+              receipt={receipt}
+              market={brief.market}
+              onSelectSlot={(slot) => setSelectedSlot(slot)}
+              selectedSlot={selectedSlot}
+              onOverrideFee={handleOverrideFee}
+              onOpenMatrixModal={() => setIsMatrixOpen(true)}
+            />
+          </div>
+        )}
 
+        {/* Section 5: The Bill Component Suite & NLP Sandbox */}
+        <div ref={suiteRef}>
           <BriefControls
             brief={brief}
             onChange={(u) => setBrief((prev) => ({ ...prev, ...u }))}
@@ -164,47 +161,7 @@ export default function Home() {
             onSolve={() => executeSolve()}
             isLoading={isLoading}
           />
-
-          <AgentPanel onApplyPatch={handleApplyPatch} isLoading={isLoading} />
         </div>
-
-        {isLoading && !receipt && (
-          <div className="card-dope p-12 text-center space-y-4">
-            <div className="w-10 h-10 mx-auto rounded-lg bg-[#cbf230]/10 border border-[#cbf230]/30 flex items-center justify-center">
-              <Activity className="w-5 h-5 text-[#cbf230] animate-spin" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-base font-normal text-[#f1eff0]">
-                Querying Qloo Cultural Taste Graph...
-              </h3>
-              <p className="text-xs text-[#a69fa9] max-w-md mx-auto font-mono">
-                Computing pairwise cosine tasteOverlap and solving submodular knapsack.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {receipt && (
-          <div className="space-y-12">
-            <Comparison receipt={receipt} />
-            <section className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-mono text-[#a69fa9] uppercase tracking-wider">
-                  THE CURATED BILL & STAGE BREAKDOWN
-                </h3>
-                <span className="text-xs text-[#a69fa9] font-mono">
-                  Click slot to inspect Qloo tasteOverlap
-                </span>
-              </div>
-              <Poster
-                stages={receipt.stages}
-                onSelectSlot={(slot) => setSelectedSlot(slot)}
-                selectedSlotId={selectedSlot?.id}
-                onOverrideFee={handleOverrideFee}
-              />
-            </section>
-          </div>
-        )}
       </main>
 
       {/* Floating Dock Benchmark Bar */}
@@ -213,7 +170,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-[#cbf230] shadow-[0_0_8px_#cbf230]" />
             <span>
-              API ENDPOINT: <code className="text-[#f1eff0] bg-white/5 px-1.5 py-0.5 rounded">POST /api/solve</code>
+              API ENDPOINT: <code className="text-[#f1eff0] bg-white/5 px-1.5 py-0.5 rounded">POST /v2/solve/portfolio-lineup</code>
             </span>
           </div>
           <div className="flex items-center gap-4">

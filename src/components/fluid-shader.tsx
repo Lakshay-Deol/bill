@@ -168,7 +168,7 @@ export function FluidShader() {
 
   return (
     <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden" aria-hidden="true">
-      <canvas ref={canvasRef} className="w-full h-full block opacity-70" />
+      <canvas id="shader-canvas-ANIMATION_19" ref={canvasRef} className="w-full h-full block opacity-70" />
       <div className="absolute inset-0 bg-[#09090b]/80 backdrop-blur-[4px] pointer-events-none" />
       <div className="absolute inset-0 bg-radial from-transparent via-[#09090b]/60 to-[#070709]/95 pointer-events-none" />
     </div>

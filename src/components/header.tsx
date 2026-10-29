@@ -10,6 +10,7 @@ interface HeaderProps {
   onScrollToTerminal?: () => void;
   onScrollToQloo?: () => void;
   onScrollToFeatures?: () => void;
+  onScrollToBill?: () => void;
   hasReceipt?: boolean;
 }
 
@@ -20,6 +21,7 @@ export function Header({
   onScrollToTerminal,
   onScrollToQloo,
   onScrollToFeatures,
+  onScrollToBill,
   hasReceipt = false,
 }: HeaderProps) {
   return (
@@ -42,7 +44,7 @@ export function Header({
           </button>
         </div>
 
-        {/* Center Nav Items (Stitch Pill Bar) */}
+        {/* Center Nav Items */}
         <nav className="hidden md:flex items-center gap-1 bg-[#131316]/70 px-2 py-1 rounded-full border border-white/5 text-[11px] font-mono uppercase tracking-wider">
           <button
             type="button"
@@ -67,6 +69,14 @@ export function Header({
             className="px-3 py-1 rounded-full text-[#a69fa9] hover:text-[#dfb7ff] hover:bg-white/5 transition-all cursor-pointer"
           >
             Taste Graph
+          </button>
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={onScrollToBill}
+            className="px-3 py-1 rounded-full text-[#a69fa9] hover:text-[#cbf230] hover:bg-white/5 transition-all cursor-pointer"
+          >
+            The Bill
           </button>
 
           {hasReceipt && (
