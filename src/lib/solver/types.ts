@@ -41,6 +41,8 @@ export interface LineupComparisonMetrics {
   modeledUniqueDemand: number;
   totalSpent: number;
   avgTasteOverlap: number;
+  maxTasteOverlap?: number;
+  fansPerDollar: number;
   acts: Array<{ id: string; name: string; fee: number }>;
 }
 
@@ -50,6 +52,8 @@ export interface LineupReceipt {
   remainingBudget: number;
   modeledUniqueDemand: number;
   avgTasteOverlap: number;
+  maxTasteOverlap?: number;
+  fansPerDollar: number;
   stages: Array<{
     stageNumber: number;
     stageName: string;

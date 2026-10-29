@@ -1,7 +1,7 @@
 import { SolverCandidate, SolverInput } from "./types";
 import { GreedyCandidateState } from "./greedy";
 import { SWAP_ITERS } from "@/lib/model/constants";
-import { feeEstimate, totalLineupScore } from "@/lib/model";
+import { feeEstimate, getReferenceBudget, totalLineupScore } from "@/lib/model";
 
 export function localSearchSwap(
   initialLineup: GreedyCandidateState[],
@@ -21,6 +21,7 @@ export function localSearchSwap(
     maxPerGenre = {},
   } = input;
 
+  const feeRef = getReferenceBudget(capacity);
   const mustIncludeSet = new Set(mustInclude);
   let currentLineup = [...initialLineup];
   let currentSpend = initialSpend;
@@ -63,7 +64,7 @@ export function localSearchSwap(
           if (otherLocals === 0 && !v.isLocal) continue;
         }
 
-        const vFee = feeEstimate(v.popularity, budget, v.feeOverride);
+        const vFee = feeEstimate(v.popularity, feeRef, v.feeOverride);
         const newSpend = currentSpend - u.fee + vFee;
         if (newSpend > budget) continue;
 
@@ -87,7 +88,7 @@ export function localSearchSwap(
         const newScore = totalLineupScore(testLineup, overlap, capacity);
         const gain = newScore - currentScore;
 
-        if (gain > bestGain) {
+        if (gain > bestGain + 1e-9) {
           bestGain = gain;
           bestSwap = {
             outIndex: i,
@@ -96,6 +97,23 @@ export function localSearchSwap(
             newSpend,
             newScore,
           };
+        } else if (Math.abs(gain - bestGain) < 1e-9 && bestGain > 0 && bestSwap) {
+          // Deterministic tie-break: lower spend -> lower fee -> entityId ascending
+          if (
+            newSpend < bestSwap.newSpend ||
+            (newSpend === bestSwap.newSpend &&
+              (vFee < bestSwap.inFee ||
+                (vFee === bestSwap.inFee && v.id.localeCompare(bestSwap.inAct.id) < 0)))
+          ) {
+            bestGain = gain;
+            bestSwap = {
+              outIndex: i,
+              inAct: v,
+              inFee: vFee,
+              newSpend,
+              newScore,
+            };
+          }
         }
       }
     }

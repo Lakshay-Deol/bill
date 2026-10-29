@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { solveLineup, solveNaiveBaseline } from "@/lib/solver";
+import { feeEstimate, getReferenceBudget } from "@/lib/model";
 import { SYNTHETIC_PHOEBE_BRIDGERS } from "@/lib/fixtures/synthetic-artists";
 
 describe("Solver - Hard Invariants", () => {
@@ -151,5 +152,64 @@ describe("Solver - Hard Invariants", () => {
     });
 
     expect(optimized.modeledUniqueDemand).toBeGreaterThanOrEqual(naive.modeledUniqueDemand);
+  });
+
+  it("Budget slider changes selected lineup (verifies scale-invariance fix)", () => {
+    const lowBudget = 80000;
+    const highBudget = 250000;
+    const lowSolution = solveLineup({
+      universe: testUniverse,
+      overlap: testOverlap,
+      budget: lowBudget,
+      capacity,
+      actCount: 3,
+    });
+    const highSolution = solveLineup({
+      universe: testUniverse,
+      overlap: testOverlap,
+      budget: highBudget,
+      capacity,
+      actCount: 3,
+    });
+
+    const lowIds = lowSolution.lineup.map((a) => a.id).sort();
+    const highIds = highSolution.lineup.map((a) => a.id).sort();
+    expect(lowIds).not.toEqual(highIds);
+  });
+
+  it("Baseline spend matches optimizer spend within one act's fee", () => {
+    const receipt = solveLineup({
+      universe: testUniverse,
+      overlap: testOverlap,
+      budget,
+      capacity,
+      actCount,
+    });
+
+    expect(receipt.naiveComparison).toBeDefined();
+    const naive = receipt.naiveComparison!;
+    const maxActFee = Math.max(
+      ...testUniverse.map((u) => feeEstimate(u.popularity, getReferenceBudget(capacity)))
+    );
+    const diff = Math.abs(receipt.totalSpent - naive.totalSpent);
+    expect(diff).toBeLessThanOrEqual(maxActFee);
+  });
+
+  it("Receipt contains valid maxTasteOverlap and fansPerDollar", () => {
+    const receipt = solveLineup({
+      universe: testUniverse,
+      overlap: testOverlap,
+      budget,
+      capacity,
+      actCount,
+    });
+
+    expect(receipt.maxTasteOverlap).toBeDefined();
+    expect(receipt.maxTasteOverlap).toBeGreaterThanOrEqual(0);
+    expect(receipt.maxTasteOverlap).toBeLessThanOrEqual(1);
+    expect(receipt.fansPerDollar).toBeGreaterThan(0);
+
+    expect(receipt.naiveComparison?.maxTasteOverlap).toBeDefined();
+    expect(receipt.naiveComparison?.fansPerDollar).toBeGreaterThan(0);
   });
 });

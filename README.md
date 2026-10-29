@@ -1,4 +1,4 @@
-# The Bill
+# Crowdfolio
 
 **Lineups are portfolios.**
 
@@ -22,7 +22,7 @@ The data that would reveal this overlap exists. Nobody operationalizes it as a *
 
 **A lineup is a portfolio.** Every act is a position that buys exposure to a cluster of taste. Two acts with overlapping audiences are correlated holdings. The objective isn't "maximize the quality of each act" — it's **maximize distinct demand reached per dollar of talent spend, subject to a budget constraint.**
 
-Most recommendation tools answer *"who else is like this?"* The Bill answers *"who else is not — and can we afford them?"*
+Most recommendation tools answer *"who else is like this?"* Crowdfolio answers *"who else is not — and can we afford them?"*
 
 ## How it works
 
@@ -92,16 +92,17 @@ zod at every boundary · Vitest · Playwright
 
 Measured against real live Qloo taste graph responses (`market: Austin`, budget `$250,000`, 8 acts):
 
-| Metric | Naive Greedy Selection | The Bill (Optimizer) | Impact / Delta |
+| Metric | Naive Greedy Selection | Crowdfolio (Optimizer) | Impact / Delta |
 |---|---|---|---|
 | **Modeled Unique Demand** | 8,940 attendees | **13,019 attendees** | **+45.6% uplift** (+4,079 fans) |
 | **Average Taste Overlap** | 10.0% | **0.0%** | **-10.0 percentage points** |
 | **Total Talent Spend** | $222,938 (est.) | $249,442 (est.) | Optimal budget utilization |
-| **Audience Cannibalization** | High (correlated acts) | Minimal (distinct clusters) | Diversified fan portfolio |
+| **Taste Overlap Risk** | Concentrated (correlated acts) | Minimal (distinct clusters) | Diversified fan portfolio |
 
 Tested across 20 synthetic festival brief perturbations (`pnpm bench -- --n 20`):
-- **Median uplift**: `+45.6%`
-- **Lineups with positive uplift**: `20 / 20 (100%)`
+- **Median uplift**: `+23.5%` (IQR: `43.1 percentage points`, Q1: `+11.8%`, Q3: `+54.9%`)
+- **Range**: `+0.0%` to `+219.6%`
+- **Lineups with positive uplift**: `16 / 20 (80.0%)`
 - **Pure determinism**: 100% byte-identical output across repeated runs (tie-break by `entityId`).
 
 ## Run locally

@@ -19,7 +19,7 @@ export function AttributionInspector({
   if (!activeSlot) {
     return (
       <div className="p-6 rounded-3xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 shadow-xl ring-1 ring-white/5 text-center text-xs font-mono text-[#a69fa9] py-12">
-        Select an act on the bill to inspect its Qloo attribution receipt.
+        Select an act in the lineup to inspect its Qloo attribution receipt.
       </div>
     );
   }

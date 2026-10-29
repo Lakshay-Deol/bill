@@ -33,3 +33,13 @@ export const CONCURRENCY = 6;
 
 // Maximum iterations for 1-swap local search hill-climbing
 export const SWAP_ITERS = 200;
+
+// Talent spend reference per attendee capacity ($50/attendee baseline)
+export const TALENT_PER_CAPITA = 50;
+
+// Standard reference capacity and budget baseline
+export const BASE_REFERENCE_CAPACITY = 5000;
+export const BASE_REFERENCE_BUDGET = 250_000;
+
+// Minimum market/seed affinity threshold for candidate universe inclusion (filters zero-affinity incoherence)
+export const MIN_AFFINITY_FLOOR = 0.15;

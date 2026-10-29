@@ -14,9 +14,9 @@ async function main() {
     n = parseInt(args[nIndex + 1]!, 10);
   }
 
-  console.log(`[The Bill Benchmark] Evaluating uplift distribution across ${n} festival briefs...\n`);
+  console.log(`[Crowdfolio Benchmark] Evaluating uplift distribution across ${n} festival briefs...\n`);
 
-  // Build a warm universe
+  // Build candidate universe
   const seedNames = ["Phoebe Bridgers", "boygenius", "Lucy Dacus"];
   const seedIds: string[] = [];
   for (const name of seedNames) {
@@ -36,13 +36,13 @@ async function main() {
     popularity: c.popularity,
     genres: c.genres,
     imageUrl: c.imageUrl,
-    isLocal: c.genres.some((g) => g.toLowerCase().includes("indie folk")),
+    isLocal: c.genres.some((g) => g.toLowerCase().includes("indie folk") || g.toLowerCase().includes("austin")),
   }));
 
-  // Define 20 diverse realistic festival briefs
-  const budgets = [100000, 150000, 200000, 250000, 350000];
-  const capacities = [2500, 4000, 5000, 8000];
-  const actCounts = [6, 8, 10];
+  // Define diverse realistic festival briefs across budgets, capacities, and slot counts
+  const budgets = [80000, 120000, 160000, 200000, 250000, 320000, 450000];
+  const capacities = [2000, 3500, 5000, 7500, 10000];
+  const actCounts = [4, 6, 8, 10, 12];
 
   const results: Array<{
     brief: string;
@@ -70,9 +70,14 @@ async function main() {
       requireLocal: reqLocal,
     });
 
-    const naiveDemand = receipt.naiveComparison?.modeledUniqueDemand ?? 1;
+    const naiveDemand = receipt.naiveComparison?.modeledUniqueDemand ?? 0;
     const optDemand = receipt.modeledUniqueDemand;
-    const uplift = Number((((optDemand - naiveDemand) / naiveDemand) * 100).toFixed(1));
+    const uplift =
+      naiveDemand > 0
+        ? Number((((optDemand - naiveDemand) / naiveDemand) * 100).toFixed(1))
+        : optDemand > 0
+        ? 100
+        : 0;
     const overlapRed = Number(
       (((receipt.naiveComparison?.avgTasteOverlap ?? 0) - receipt.avgTasteOverlap) * 100).toFixed(1)
     );
@@ -90,9 +95,14 @@ async function main() {
   }
 
   const uplifts = results.map((r) => r.uplift).sort((a, b) => a - b);
+  const minUplift = uplifts[0]!;
+  const q1Uplift = uplifts[Math.floor(uplifts.length * 0.25)]!;
   const medianUplift = uplifts[Math.floor(uplifts.length / 2)]!;
-  const bestUplift = uplifts[uplifts.length - 1]!;
-  const worstUplift = uplifts[0]!;
+  const q3Uplift = uplifts[Math.floor(uplifts.length * 0.75)]!;
+  const iqrUplift = Number((q3Uplift - q1Uplift).toFixed(1));
+  const maxUplift = uplifts[uplifts.length - 1]!;
+  const positiveCount = uplifts.filter((u) => u > 0).length;
+  const positiveShare = Number(((positiveCount / uplifts.length) * 100).toFixed(1));
 
   console.log(`| # | Brief | Opt. Demand | Naive Demand | Uplift | Overlap Red. |`);
   console.log(`|---|---|---|---|---|---|`);
@@ -106,9 +116,13 @@ async function main() {
   console.log(`\n================================================================================`);
   console.log(`BENCHMARK SUMMARY (${n} BRIEFS)`);
   console.log(`================================================================================`);
-  console.log(`Median Uplift: +${medianUplift.toFixed(1)}%`);
-  console.log(`Best Uplift:   +${bestUplift.toFixed(1)}%`);
-  console.log(`Worst Uplift:  +${worstUplift.toFixed(1)}%`);
+  console.log(`Min Uplift:           +${minUplift.toFixed(1)}%`);
+  console.log(`Q1 Uplift:            +${q1Uplift.toFixed(1)}%`);
+  console.log(`Median Uplift:        +${medianUplift.toFixed(1)}%`);
+  console.log(`Q3 Uplift:            +${q3Uplift.toFixed(1)}%`);
+  console.log(`IQR (Spread):          ${iqrUplift.toFixed(1)} percentage points`);
+  console.log(`Max Uplift:           +${maxUplift.toFixed(1)}%`);
+  console.log(`Positive Uplift Runs:  ${positiveCount}/${uplifts.length} (${positiveShare}%)`);
   console.log(`================================================================================\n`);
 }
 

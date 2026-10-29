@@ -85,19 +85,25 @@ export function solveLineup(input: SolverInput): LineupReceipt {
   // Compute total modeled unique demand
   const modeledUniqueDemand = bookedSlots.reduce((sum, slot) => sum + slot.marginalUnique, 0);
 
-  // Compute average taste overlap
+  // Compute average and max taste overlap
   let totalOverlap = 0;
+  let maxTasteOverlap = 0;
   let pairCount = 0;
   for (let i = 0; i < bookedSlots.length; i++) {
     for (let j = i + 1; j < bookedSlots.length; j++) {
-      totalOverlap += getTasteOverlap(bookedSlots[i]!.id, bookedSlots[j]!.id, overlap);
+      const o = getTasteOverlap(bookedSlots[i]!.id, bookedSlots[j]!.id, overlap);
+      totalOverlap += o;
+      if (o > maxTasteOverlap) {
+        maxTasteOverlap = o;
+      }
       pairCount++;
     }
   }
   const avgTasteOverlap = pairCount > 0 ? Number((totalOverlap / pairCount).toFixed(4)) : 0;
+  const fansPerDollar = Number((modeledUniqueDemand / Math.max(1, finalSpend)).toFixed(4));
 
-  // 5. Compare with naive baseline
-  const naiveComparison = solveNaiveBaseline(input);
+  // 5. Compare with naive baseline at constant spend
+  const naiveComparison = solveNaiveBaseline(input, finalSpend);
   const upliftPercent =
     naiveComparison.modeledUniqueDemand > 0
       ? Number(
@@ -115,6 +121,8 @@ export function solveLineup(input: SolverInput): LineupReceipt {
     remainingBudget: Math.max(0, budget - finalSpend),
     modeledUniqueDemand,
     avgTasteOverlap,
+    maxTasteOverlap: Number(maxTasteOverlap.toFixed(4)),
+    fansPerDollar,
     stages,
     naiveComparison,
     upliftPercent,

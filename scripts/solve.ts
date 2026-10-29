@@ -8,7 +8,7 @@ import { solveLineup } from "../src/lib/solver";
 
 async function main() {
   const preset = process.argv[2] ?? "--preset austin";
-  console.log(`[The Bill Solver] Running lineup optimization for: ${preset}\n`);
+  console.log(`[Crowdfolio Solver] Running lineup optimization for: ${preset}\n`);
 
   const budget = 250000;
   const capacity = 5000;
@@ -70,7 +70,8 @@ async function main() {
   console.log(`\n--------------------------------------------------------------------------------`);
   console.log(`Total Spent: $${receipt.totalSpent.toLocaleString()} / $${budget.toLocaleString()}`);
   console.log(`Modeled Unique Demand: ${receipt.modeledUniqueDemand.toLocaleString()} attendees`);
-  console.log(`Average Taste Overlap: ${(receipt.avgTasteOverlap * 100).toFixed(1)}%`);
+  console.log(`Average Taste Overlap: ${(receipt.avgTasteOverlap * 100).toFixed(1)}% (Max: ${((receipt.maxTasteOverlap ?? 0) * 100).toFixed(1)}%)`);
+  console.log(`Fans Per Dollar: ${receipt.fansPerDollar.toFixed(4)}`);
   console.log(`--------------------------------------------------------------------------------\n`);
 
   if (receipt.naiveComparison) {

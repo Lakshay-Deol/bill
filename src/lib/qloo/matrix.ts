@@ -2,6 +2,7 @@ import pLimit from "p-limit";
 import { qlooGet } from "./client";
 import { QlooInsightsResponseSchema, QlooInsightEntity } from "./schemas";
 import { getCached, setCached } from "./cache";
+import { MIN_AFFINITY_FLOOR } from "@/lib/model";
 
 export interface CandidateArtist {
   id: string;
@@ -180,6 +181,9 @@ export async function buildUniverseAndMatrix(
     for (const raw of res.rawEntities) {
       const id = raw.entity_id ?? raw.id;
       if (!id) continue;
+
+      const affinity = res.neighborsMap[id] ?? raw.query?.affinity ?? raw.affinity ?? 0.5;
+      if (affinity < MIN_AFFINITY_FLOOR) continue;
 
       if (!candidateMap.has(id)) {
         const genres = [

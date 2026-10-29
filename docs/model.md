@@ -1,6 +1,6 @@
 # The model
 
-Citable description of how The Bill turns a taste graph into a lineup. Constants referenced here live in `src/lib/model/constants.ts` with rationale comments; if this document and the code disagree, the code is wrong.
+Citable description of how Crowdfolio turns a taste graph into a lineup. Constants referenced here live in `src/lib/model/constants.ts` with rationale comments; if this document and the code disagree, the code is wrong.
 
 ---
 
@@ -71,17 +71,18 @@ A new act adds its reach less the share of audience it shares with its **closest
 ## 4. Fee estimate
 
 ```
-fee_i = FLOOR + (0.45·B − FLOOR) · p_i^γ
-FLOOR = 0.02·B ,  γ = 2.2
+fee_i = FLOOR + (0.45·B_ref − FLOOR) · p_i^γ
+FLOOR = 0.02·B_ref ,  γ = 2.2
+B_ref = CAP · 50  (default $250,000 baseline)
 ```
 
-**Why self-scaling.** Absolute talent fees are not public data. Anchoring the curve to the promoter's own budget means the model never claims to know what an act costs — only how the promoter's money is distributed across tiers. The top act can consume at most 45% of budget; the cheapest act is 2%.
+**Why anchored to market reference scale.** Talent fees reflect market tiers and festival capacity scale ($50/attendee baseline), rather than floating with the promoter's budget slider. Anchoring `B_ref` ensures costs are independent of the budget slider, allowing the budget slider constraint ($\sum_{i \in S} \text{fee}_i \le B$) to actively bind and restructure which lineup is selected. The top act on a 5k-cap bill can consume at most 45% of reference budget; the floor act is 2%.
 
 **Why γ = 2.2 > β = 1.5.** Fees rise faster than draw at the top of the market. Headliners command a premium that is not proportional to attendance lift — this is the economic fact that makes lineup optimization interesting in the first place.
 
 **Accuracy.** ±40%, and every rendering carries `est.`. The user can override any fee. The product's claim — relative efficiency at constant budget — requires only that `fee` be monotone in popularity, not accurate in absolute terms.
 
-**Worked example**, `B = $250,000`:
+**Worked example**, `B_ref = $250,000`:
 
 | `p_i` | `fee_i` |
 |---|---|

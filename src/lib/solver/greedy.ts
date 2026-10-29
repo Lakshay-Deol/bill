@@ -1,5 +1,12 @@
 import { SolverCandidate, SolverInput } from "./types";
-import { feeEstimate, reach, getTasteOverlap, marginalUnique, valuePerDollar } from "@/lib/model";
+import {
+  feeEstimate,
+  getReferenceBudget,
+  reach,
+  getTasteOverlap,
+  marginalUnique,
+  valuePerDollar,
+} from "@/lib/model";
 
 export interface GreedyCandidateState extends SolverCandidate {
   fee: number;
@@ -19,6 +26,9 @@ export function solveGreedy(input: SolverInput): {
     requireLocal = false,
     maxPerGenre = {},
   } = input;
+
+  // Anchor talent fee scale to festival capacity/market tier
+  const feeRef = getReferenceBudget(capacity);
 
   const candidateMap = new Map<string, SolverCandidate>(universe.map((c) => [c.id, c]));
   const selected: GreedyCandidateState[] = [];
@@ -56,7 +66,7 @@ export function solveGreedy(input: SolverInput): {
 
   for (const act of mustIncludeActs) {
     if (selected.length >= actCount) break;
-    const fee = feeEstimate(act.popularity, budget, act.feeOverride);
+    const fee = feeEstimate(act.popularity, feeRef, act.feeOverride);
     if (currentSpend + fee <= budget && canAddGenre(act.genres)) {
       addAct(act, fee);
     }
@@ -79,7 +89,7 @@ export function solveGreedy(input: SolverInput): {
       if (selectedIds.has(candidate.id)) continue;
       if (needLocalImmediately && !candidate.isLocal) continue;
 
-      const fee = feeEstimate(candidate.popularity, budget, candidate.feeOverride);
+      const fee = feeEstimate(candidate.popularity, feeRef, candidate.feeOverride);
       if (currentSpend + fee > budget) continue;
       if (!canAddGenre(candidate.genres)) continue;
 
