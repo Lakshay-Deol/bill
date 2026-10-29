@@ -9,13 +9,9 @@ export function QlooShowcase() {
       {/* Background radial tint */}
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#dfb7ff]/5 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Header */}
+      {/* Header (eyebrow removed) */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-white/10">
         <div>
-          <div className="inline-flex items-center gap-2 font-mono text-xs text-[#cbf230] uppercase tracking-widest mb-1.5">
-            <Database className="w-3.5 h-3.5 text-[#cbf230]" />
-            ENTERPRISE TASTE INTELLIGENCE
-          </div>
           <h2 className="font-syne text-3xl sm:text-4xl uppercase tracking-tight text-[#f1eff0]">
             Why Qloo is Load-Bearing
           </h2>
@@ -142,9 +138,9 @@ Authorization: Bearer qloo_live_oct30_demo
 
         <div className="w-full lg:w-80 flex flex-col justify-between bg-[#070709]/80 p-5 rounded-2xl border border-white/10 space-y-4">
           <div className="space-y-2.5">
-            <div className="font-mono text-[11px] text-[#cbf230] uppercase tracking-wider">
-              SOLVER TELEMETRY
-            </div>
+            <h4 className="font-syne text-sm font-bold text-[#f1eff0] uppercase">
+              Solver Telemetry
+            </h4>
             <div className="flex justify-between font-mono text-xs">
               <span className="text-[#a69fa9]">Qloo Entities Scanned</span>
               <span className="text-[#f1eff0] font-semibold">1,248 Artists</span>

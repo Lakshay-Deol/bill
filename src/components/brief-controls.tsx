@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sliders } from "lucide-react";
 import { NlPromptBar } from "./nl-prompt-bar";
 
 export interface BriefState {
@@ -91,12 +90,9 @@ export function BriefControls({
 
   return (
     <section id="component-suite" className="p-6 sm:p-8 rounded-3xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 ring-1 ring-white/5 space-y-8">
-      {/* Header */}
+      {/* Header (eyebrows removed) */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-white/10">
         <div>
-          <div className="inline-flex items-center gap-2 font-mono text-xs text-[#dfb7ff] uppercase tracking-widest mb-1.5 font-semibold">
-            <Sliders className="w-3.5 h-3.5" /> INTERACTIVE DESIGN SYSTEM PRIMITIVES
-          </div>
           <h2 className="font-syne text-2xl sm:text-3xl uppercase tracking-tight text-[#f1eff0] font-bold">
             The Bill Component Suite
           </h2>
@@ -109,18 +105,17 @@ export function BriefControls({
         </span>
       </div>
 
-      {/* 3 Widgets Grid */}
+      {/* 3 Widgets Grid (eyebrow tags removed) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Widget 01: Budget Slider */}
         <div className="p-6 rounded-2xl bg-[#131316]/80 border border-white/10 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="font-mono text-[11px] text-[#cbf230] uppercase tracking-wider font-semibold">WIDGET 01</span>
+              <h4 className="font-syne text-base uppercase font-bold text-[#f1eff0]">
+                Talent Budget Constraint
+              </h4>
               <span className="font-mono text-[11px] text-[#a69fa9]">Range Slider</span>
             </div>
-            <h4 className="font-syne text-base uppercase font-bold text-[#f1eff0] mb-1">
-              Talent Budget Constraint
-            </h4>
             <p className="font-space text-xs text-[#a69fa9] mb-4">
               Controls capital ceiling, dynamically calculating submodular marginal yields.
             </p>
@@ -157,12 +152,11 @@ export function BriefControls({
         <div className="p-6 rounded-2xl bg-[#131316]/80 border border-white/10 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="font-mono text-[11px] text-[#dfb7ff] uppercase tracking-wider font-semibold">WIDGET 02</span>
+              <h4 className="font-syne text-base uppercase font-bold text-[#f1eff0]">
+                Taste Graph Guardrails
+              </h4>
               <span className="font-mono text-[11px] text-[#a69fa9]">Graph Rules</span>
             </div>
-            <h4 className="font-syne text-base uppercase font-bold text-[#f1eff0] mb-1">
-              Taste Graph Guardrails
-            </h4>
             <p className="font-space text-xs text-[#a69fa9] mb-4">
               Constrains submodular greedy selector with hard geo-local and genre limits.
             </p>
@@ -205,12 +199,11 @@ export function BriefControls({
         <div className="p-6 rounded-2xl bg-[#131316]/80 border border-white/10 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="font-mono text-[11px] text-[#ffb4a3] uppercase tracking-wider font-semibold">WIDGET 03</span>
+              <h4 className="font-syne text-base uppercase font-bold text-[#f1eff0]">
+                Solver Benchmark Card
+              </h4>
               <span className="font-mono text-[11px] text-[#a69fa9]">Provenance</span>
             </div>
-            <h4 className="font-syne text-base uppercase font-bold text-[#f1eff0] mb-1">
-              Solver Benchmark Card
-            </h4>
             <p className="font-space text-xs text-[#a69fa9] mb-4">
               Audit proof of algorithm runtime, cache state, and computational iterations.
             </p>

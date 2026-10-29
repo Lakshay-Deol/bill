@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { LineupReceipt, BookedSlot } from "@/lib/solver";
 import { Poster } from "./poster";
-import { Sparkles, Grid, SlidersHorizontal, CheckCircle2, MapPin } from "lucide-react";
+import { Grid, SlidersHorizontal } from "lucide-react";
 
 interface CuratedBillSectionProps {
   receipt: LineupReceipt;
@@ -38,13 +38,10 @@ export function CuratedBillSection({
 
   return (
     <section id="bill-section" className="space-y-6">
-      {/* Section Title + Solver Control Bar */}
+      {/* Section Title + Solver Control Bar (eyebrow removed) */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-5 rounded-2xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 ring-1 ring-white/5">
         <div>
-          <div className="font-mono text-[10px] text-[#cbf230] uppercase tracking-wider font-semibold">
-            OPTIMAL LINEUP FORMULATION
-          </div>
-          <h2 className="font-syne text-2xl uppercase tracking-tight text-[#f1eff0] mt-0.5">
+          <h2 className="font-syne text-2xl uppercase tracking-tight text-[#f1eff0]">
             The Curated Bill
           </h2>
         </div>
@@ -88,13 +85,10 @@ export function CuratedBillSection({
             <div className="absolute -top-16 -right-16 w-56 h-56 bg-[#dfb7ff]/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-[#cbf230]/10 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Festival Header */}
+            {/* Festival Header (eyebrow removed) */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-5 mb-6 border-b border-white/10">
               <div>
-                <div className="font-mono text-[10px] text-[#cbf230] uppercase tracking-widest font-semibold">
-                  SUBMODULAR PORTFOLIO LINEUP
-                </div>
-                <h3 className="font-syne text-2xl sm:text-3xl uppercase text-[#f1eff0] tracking-tight mt-0.5 font-bold">
+                <h3 className="font-syne text-2xl sm:text-3xl uppercase text-[#f1eff0] tracking-tight font-bold">
                   {market.toUpperCase()} HORIZON FESTIVAL
                 </h3>
                 <div className="font-mono text-[11px] text-[#a69fa9] mt-0.5">
@@ -124,17 +118,12 @@ export function CuratedBillSection({
 
         {/* Right 4 cols: Pairwise Matrix & Receipt Inspector */}
         <div className="xl:col-span-4 flex flex-col gap-6">
-          {/* Heatmap Card */}
+          {/* Heatmap Card (eyebrow removed) */}
           <div className="p-6 rounded-3xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 shadow-xl ring-1 ring-white/5 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div>
-                <div className="font-mono text-[10px] text-[#cbf230] uppercase tracking-wider font-semibold">
-                  PAIRWISE TASTE OVERLAP
-                </div>
-                <h4 className="font-syne text-lg uppercase font-bold text-[#f1eff0]">
-                  Cosine Heatmap
-                </h4>
-              </div>
+              <h4 className="font-syne text-lg uppercase font-bold text-[#f1eff0]">
+                Cosine Heatmap
+              </h4>
               <span className="px-2.5 py-1 rounded-full bg-[#cbf230]/15 text-[#cbf230] font-mono text-xs font-bold border border-[#cbf230]/30">
                 {receipt.avgTasteOverlap.toFixed(2)} AVG
               </span>
@@ -188,13 +177,13 @@ export function CuratedBillSection({
             </button>
           </div>
 
-          {/* Attribution Receipt Card */}
+          {/* Attribution Receipt Card (eyebrow removed) */}
           {activeSlot && (
             <div className="p-6 rounded-3xl bg-[#0e0e0e]/80 backdrop-blur-md border border-white/10 shadow-xl ring-1 ring-white/5 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                <span className="font-mono text-[10px] text-[#dfb7ff] uppercase tracking-wider font-semibold">
-                  QLOO ATTRIBUTION RECEIPT
-                </span>
+                <h4 className="font-syne text-sm font-bold text-[#f1eff0] uppercase">
+                  Attribution Receipt
+                </h4>
                 <span className="font-mono text-[10px] text-[#a69fa9]">
                   NODE #{activeSlot.id.slice(0, 8)}
                 </span>

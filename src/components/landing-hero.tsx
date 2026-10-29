@@ -43,13 +43,9 @@ export function LandingHero({
       <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#dfb7ff]/15 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#cbf230]/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Main Editorial Text */}
+      {/* Main Editorial Text (eyebrow removed) */}
       <div className="relative z-10 max-w-3xl py-4 sm:py-6 space-y-6">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono uppercase tracking-[0.16em] text-[#cbf230]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#cbf230] animate-pulse" />
-            ENTERPRISE TASTE GRAPH OPTIMIZER
-          </div>
           <h1 className="font-syne text-4xl sm:text-6xl md:text-[74px] uppercase text-[#f1eff0] tracking-tighter leading-[0.95] drop-shadow-md">
             Lineups are{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#dfb7ff] via-[#ffb4a3] to-[#cbf230]">

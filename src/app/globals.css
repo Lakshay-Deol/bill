@@ -98,14 +98,6 @@ body {
   font-weight: 700;
 }
 
-/* Frosted Nav Bar */
-.frosted-nav-bar {
-  background: rgba(7, 7, 9, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-}
-
 /* Filled Action Button */
 .btn-filled-action {
   background: #cbf230;
@@ -137,6 +129,31 @@ body {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
+}
+
+/* Infinite Marquee Track */
+@keyframes marqueeScroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: max-content;
+  animation: marqueeScroll 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none !important;
+    overflow-x: auto;
+  }
 }
 
 /* Custom scrollbars */

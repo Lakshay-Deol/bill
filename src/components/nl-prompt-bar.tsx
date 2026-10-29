@@ -25,10 +25,8 @@ export function NlPromptBar({ onApplyPrompt, isLoading }: NlPromptBarProps) {
 
   return (
     <div className="p-6 rounded-2xl bg-[#131316]/80 border border-white/10 space-y-4">
+      {/* Header without eyebrow */}
       <div>
-        <span className="font-mono text-[10px] text-[#cbf230] uppercase tracking-wider font-semibold">
-          WIDGET 04 · NATURAL LANGUAGE RE-SOLVE BAR
-        </span>
         <h4 className="font-syne text-base uppercase font-bold text-[#f1eff0]">
           Interactive Constraint Prompting
         </h4>
@@ -78,4 +76,3 @@ export function NlPromptBar({ onApplyPrompt, isLoading }: NlPromptBarProps) {
     </div>
   );
 }
-
