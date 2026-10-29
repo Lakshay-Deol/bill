@@ -17,12 +17,16 @@ export function localSearchSwap(
     budget,
     capacity,
     mustInclude = [],
+    exclude = [],
     requireLocal = false,
+    minLocalActs = 0,
     maxPerGenre = {},
   } = input;
 
   const feeRef = getReferenceBudget(capacity);
   const mustIncludeSet = new Set(mustInclude);
+  const excludeSet = new Set(exclude);
+  const targetLocalCount = Math.max(minLocalActs, requireLocal ? 1 : 0);
   let currentLineup = [...initialLineup];
   let currentSpend = initialSpend;
   let currentScore = totalLineupScore(currentLineup, overlap, capacity);
@@ -47,21 +51,14 @@ export function localSearchSwap(
       // Do not swap out must-include acts
       if (mustIncludeSet.has(u.id)) continue;
 
-      // Check if removing u violates requireLocal
-      if (requireLocal && u.isLocal) {
-        const localCount = currentLineup.filter((act) => act.isLocal).length;
-        if (localCount <= 1) {
-          // Can only swap out u if replacement v is also local
-        }
-      }
-
       for (const v of universe) {
+        if (excludeSet.has(v.id)) continue;
         if (selectedIds.has(v.id)) continue;
 
-        // If u was the sole local act, v must be local
-        if (requireLocal && u.isLocal) {
+        // Check if removing u and adding v violates local requirements
+        if (targetLocalCount > 0 && u.isLocal && !v.isLocal) {
           const otherLocals = currentLineup.filter((act, idx) => idx !== i && act.isLocal).length;
-          if (otherLocals === 0 && !v.isLocal) continue;
+          if (otherLocals < targetLocalCount) continue;
         }
 
         const vFee = feeEstimate(v.popularity, feeRef, v.feeOverride);

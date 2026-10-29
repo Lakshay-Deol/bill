@@ -15,9 +15,13 @@ export interface SolverInput {
   capacity: number;
   actCount: number;
   mustInclude?: string[];
+  exclude?: string[];
   requireLocal?: boolean;
+  minLocalActs?: number;
   maxPerGenre?: Record<string, number>;
   stageCount?: number;
+  dayCount?: number;
+  skipAnalysis?: boolean;
 }
 
 export interface BookedSlot {
@@ -35,6 +39,18 @@ export interface BookedSlot {
   closestActOverlap: number;
   stage: number;
   slotOrder: number;
+  day?: number;
+  dayName?: string;
+  status?: "stable" | "swappable";
+  selectionRate?: number;
+  alternatives?: Array<{
+    id: string;
+    name: string;
+    popularity: number;
+    fee: number;
+    deltaFans: number;
+    deltaCost: number;
+  }>;
 }
 
 export interface LineupComparisonMetrics {
@@ -59,6 +75,28 @@ export interface LineupReceipt {
     stageName: string;
     slots: BookedSlot[];
   }>;
+  days?: Array<{
+    dayNumber: number;
+    dayName: string;
+    slots: BookedSlot[];
+  }>;
+  uncertainty?: {
+    p10: number;
+    p50: number;
+    p90: number;
+    sampleCount: number;
+    isModeled: true;
+  };
+  robustness?: {
+    runCount: number;
+    perturbationPercent: number;
+    acts: Array<{
+      id: string;
+      name: string;
+      selectionRate: number;
+      status: "stable" | "swappable";
+    }>;
+  };
   naiveComparison?: LineupComparisonMetrics;
   upliftPercent?: number;
 }

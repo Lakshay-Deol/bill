@@ -3,6 +3,9 @@ import { solveGreedy } from "./greedy";
 import { localSearchSwap } from "./local-search";
 import { solveNaiveBaseline } from "./baseline";
 import { assignStages } from "./stages";
+import { computeSlotAlternatives } from "./alternatives";
+import { computeUncertaintyBands } from "./uncertainty";
+import { computeRobustness } from "./robustness";
 import { reach, marginalUnique, getTasteOverlap } from "@/lib/model";
 
 export * from "./types";
@@ -10,6 +13,11 @@ export * from "./greedy";
 export * from "./local-search";
 export * from "./baseline";
 export * from "./stages";
+export * from "./prng";
+export * from "./frontier";
+export * from "./robustness";
+export * from "./uncertainty";
+export * from "./alternatives";
 
 /**
  * Pure, deterministic lineup optimizer.
@@ -22,6 +30,7 @@ export function solveLineup(input: SolverInput): LineupReceipt {
     budget,
     capacity,
     stageCount = 2,
+    dayCount = 1,
   } = input;
 
   // 1. Monotone submodular greedy selection
@@ -79,13 +88,21 @@ export function solveLineup(input: SolverInput): LineupReceipt {
     };
   });
 
-  // 4. Assign stages deterministically
-  const stages = assignStages(bookedSlots, stageCount);
+  // 4. Compute alternatives per slot (skipped in sub-simulations)
+  if (!input.skipAnalysis) {
+    const alternativesMap = computeSlotAlternatives(input, bookedSlots, finalSpend);
+    for (const slot of bookedSlots) {
+      slot.alternatives = alternativesMap.get(slot.id) ?? [];
+    }
+  }
 
-  // Compute total modeled unique demand
+  // 5. Assign stages and days deterministically (spreading high-overlap acts)
+  const { stages, days } = assignStages(bookedSlots, stageCount, dayCount, overlap);
+
+  // 6. Compute total modeled unique demand
   const modeledUniqueDemand = bookedSlots.reduce((sum, slot) => sum + slot.marginalUnique, 0);
 
-  // Compute average and max taste overlap
+  // 7. Compute average and max taste overlap
   let totalOverlap = 0;
   let maxTasteOverlap = 0;
   let pairCount = 0;
@@ -102,7 +119,26 @@ export function solveLineup(input: SolverInput): LineupReceipt {
   const avgTasteOverlap = pairCount > 0 ? Number((totalOverlap / pairCount).toFixed(4)) : 0;
   const fansPerDollar = Number((modeledUniqueDemand / Math.max(1, finalSpend)).toFixed(4));
 
-  // 5. Compare with naive baseline at constant spend
+  // 8. Uncertainty bands (Monte Carlo)
+  const uncertainty = !input.skipAnalysis
+    ? computeUncertaintyBands(bookedSlots, overlap, capacity)
+    : undefined;
+
+  // 9. Robustness analysis (perturbed fee re-solves)
+  let robustness = undefined;
+  if (!input.skipAnalysis) {
+    robustness = computeRobustness(input, bookedSlots);
+    const robustnessMap = new Map(robustness.acts.map((a) => [a.id, a]));
+    for (const slot of bookedSlots) {
+      const rob = robustnessMap.get(slot.id);
+      if (rob) {
+        slot.status = rob.status;
+        slot.selectionRate = rob.selectionRate;
+      }
+    }
+  }
+
+  // 10. Compare with naive baseline at constant spend
   const naiveComparison = solveNaiveBaseline(input, finalSpend);
   const upliftPercent =
     naiveComparison.modeledUniqueDemand > 0
@@ -124,6 +160,9 @@ export function solveLineup(input: SolverInput): LineupReceipt {
     maxTasteOverlap: Number(maxTasteOverlap.toFixed(4)),
     fansPerDollar,
     stages,
+    days,
+    uncertainty,
+    robustness,
     naiveComparison,
     upliftPercent,
   };

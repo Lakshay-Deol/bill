@@ -6,7 +6,10 @@ export const ConstraintPatchSchema = z.object({
   capacity: z.number().optional(),
   actCount: z.number().optional(),
   requireLocal: z.boolean().optional(),
+  minLocalActs: z.number().optional(),
   mustInclude: z.array(z.string()).optional(),
+  exclude: z.array(z.string()).optional(),
+  maxPerGenre: z.record(z.number()).optional(),
 });
 
 export type ConstraintPatch = z.infer<typeof ConstraintPatchSchema>;
@@ -38,19 +41,57 @@ function parseRuleBased(input: string): ConstraintPatch {
     patch.actCount = parseInt(actsMatch[1], 10);
   }
 
-  // 3. Local requirement: "local", "opener", "local act"
-  if (lower.includes("local") || lower.includes("opener")) {
+  // 3. Local requirement & min local acts
+  const minLocalMatch = lower.match(/(?:at\s+least|min(?:imum)?)\s*(\d+)\s*local/);
+  if (minLocalMatch && minLocalMatch[1]) {
+    patch.minLocalActs = parseInt(minLocalMatch[1], 10);
+    patch.requireLocal = true;
+  } else if (lower.includes("local") || lower.includes("opener")) {
     patch.requireLocal = true;
   }
 
-  // 4. Capacity extraction: "cap 5000", "5000 cap", "capacity 4000"
+  function cleanArtistName(raw: string): string {
+    return raw
+      .replace(/(?:\binto\b|\bon\b|\bto\b|\bfrom\b|\bthe\b|\blineup\b|\broster\b)/gi, "")
+      .trim();
+  }
+
+  // 4. Lock act ("lock Mitski into the lineup", "keep Phoebe", "must include Boygenius")
+  const lockMatch = input.match(/(?:lock|keep|must\s+include|require)\s+([a-zA-Z0-9\s]+?)(?:,\s*|\band\b|$|\.)/i);
+  if (lockMatch && lockMatch[1]) {
+    const cleaned = cleanArtistName(lockMatch[1]);
+    if (cleaned && !["budget", "cap", "acts", "slots", "local"].includes(cleaned.toLowerCase())) {
+      patch.mustInclude = [cleaned];
+    }
+  }
+
+  // 5. Exclude act ("exclude Sharon", "no boygenius", "drop X", "remove Lucy Dacus")
+  const excludeMatch = input.match(/(?:exclude|no|drop|remove|without)\s+([a-zA-Z0-9\s]+?)(?:,\s*|\band\b|$|\.)/i);
+  if (excludeMatch && excludeMatch[1]) {
+    const cleaned = cleanArtistName(excludeMatch[1]);
+    if (cleaned && !["budget", "cap", "acts", "slots", "local"].includes(cleaned.toLowerCase())) {
+      patch.exclude = [cleaned];
+    }
+  }
+
+  // 6. Genre caps ("max 2 indie", "at most 3 rock", "cap rock at 2")
+  const genreCapMatch = lower.match(/(?:max(?:imum)?|at\s+most|cap)\s*(\d+)?\s*([a-zA-Z\s]+?)(?:\s+at\s+(\d+))?(?:,\s*|$|\.)/);
+  if (genreCapMatch) {
+    const capNum = genreCapMatch[1] ? parseInt(genreCapMatch[1], 10) : genreCapMatch[3] ? parseInt(genreCapMatch[3], 10) : undefined;
+    const genreName = genreCapMatch[2]?.trim().toLowerCase();
+    if (capNum !== undefined && genreName && !["acts", "slots", "budget", "cap", "local"].includes(genreName)) {
+      patch.maxPerGenre = { [genreName]: capNum };
+    }
+  }
+
+  // 7. Capacity extraction: "cap 5000", "5000 cap", "capacity 4000"
   const capMatch = lower.match(/(?:cap|capacity)\s*(?:of|to)?\s*(\d+(?:,\d+)*)\s*(k)?/);
   if (capMatch && capMatch[1]) {
     const rawCap = parseFloat(capMatch[1].replace(/,/g, ""));
     patch.capacity = capMatch[2] === "k" ? Math.round(rawCap * 1000) : Math.round(rawCap);
   }
 
-  // 5. Market extraction
+  // 8. Market extraction
   if (lower.includes("austin")) patch.market = "Austin";
   if (lower.includes("brooklyn") || lower.includes("new york")) patch.market = "New York";
   if (lower.includes("chicago")) patch.market = "Chicago";
@@ -84,7 +125,7 @@ export async function parseConstraintEdit(naturalLanguagePrompt: string): Promis
             {
               role: "system",
               content:
-                "Extract festival promoter constraints from user prompt into JSON: {budget?: number, market?: string, capacity?: number, actCount?: number, requireLocal?: boolean}",
+                "Extract festival promoter constraints from user prompt into JSON: {budget?: number, market?: string, capacity?: number, actCount?: number, requireLocal?: boolean, minLocalActs?: number, mustInclude?: string[], exclude?: string[], maxPerGenre?: Record<string, number>}",
             },
             {
               role: "user",

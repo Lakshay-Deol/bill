@@ -23,14 +23,19 @@ export function solveGreedy(input: SolverInput): {
     capacity,
     actCount,
     mustInclude = [],
+    exclude = [],
     requireLocal = false,
+    minLocalActs = 0,
     maxPerGenre = {},
   } = input;
 
   // Anchor talent fee scale to festival capacity/market tier
   const feeRef = getReferenceBudget(capacity);
+  const excludeSet = new Set(exclude);
 
-  const candidateMap = new Map<string, SolverCandidate>(universe.map((c) => [c.id, c]));
+  const candidateMap = new Map<string, SolverCandidate>(
+    universe.filter((c) => !excludeSet.has(c.id)).map((c) => [c.id, c])
+  );
   const selected: GreedyCandidateState[] = [];
   let currentSpend = 0;
 
@@ -57,6 +62,7 @@ export function solveGreedy(input: SolverInput): {
 
   // 1. Force must-include acts if feasible, sorted deterministically by popularity descending
   const mustIncludeActs = mustInclude
+    .filter((id) => !excludeSet.has(id))
     .map((id) => candidateMap.get(id))
     .filter((act): act is SolverCandidate => act !== undefined)
     .sort((a, b) => {
@@ -74,11 +80,13 @@ export function solveGreedy(input: SolverInput): {
 
   // 2. Greedy selection loop
   const selectedIds = new Set(selected.map((s) => s.id));
+  const targetLocalCount = Math.max(minLocalActs, requireLocal ? 1 : 0);
 
   while (selected.length < actCount) {
     const remainingSlots = actCount - selected.length;
-    const hasLocalBooked = selected.some((s) => s.isLocal);
-    const needLocalImmediately = requireLocal && !hasLocalBooked && remainingSlots === 1;
+    const currentLocals = selected.filter((s) => s.isLocal).length;
+    const neededLocals = Math.max(0, targetLocalCount - currentLocals);
+    const needLocalImmediately = neededLocals >= remainingSlots;
 
     let bestCandidate: SolverCandidate | null = null;
     let bestValue = -1;
@@ -86,6 +94,7 @@ export function solveGreedy(input: SolverInput): {
 
     // Evaluate all feasible unselected candidates
     for (const candidate of universe) {
+      if (excludeSet.has(candidate.id)) continue;
       if (selectedIds.has(candidate.id)) continue;
       if (needLocalImmediately && !candidate.isLocal) continue;
 
