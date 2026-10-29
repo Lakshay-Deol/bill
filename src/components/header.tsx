@@ -59,7 +59,7 @@ export function Header({
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="font-syne text-lg sm:text-xl font-bold uppercase tracking-tight text-[#f1eff0] hover:text-[#cbf230] transition-colors cursor-pointer"
+            className="font-syne text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-[#f1eff0] hover:text-[#cbf230] transition-colors cursor-pointer"
           >
             Crowdfolio
           </button>
@@ -136,7 +136,7 @@ export function Header({
         </div>
 
         {/* Right side balance spacer */}
-        <div className="hidden lg:block w-36 pointer-events-none" />
+        <div className="hidden lg:block w-48 pointer-events-none" />
       </div>
     </header>
   );
