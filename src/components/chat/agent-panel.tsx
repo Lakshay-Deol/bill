@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { MessageSquare, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldCheck, MessageSquare, Sparkles } from "lucide-react";
 import { parseConstraintEdit, ConstraintPatch } from "@/lib/agent/parse";
 
 interface AgentPanelProps {
@@ -15,7 +15,7 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
 
   const quickPrompts = [
     "Cut budget to $180k",
-    "Require Austin local opener",
+    "Require local opener",
     "Reduce lineup to 6 acts",
     "Increase budget to $350k with 10 acts",
   ];
@@ -26,7 +26,7 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
 
     const patch = await parseConstraintEdit(prompt);
     onApplyPatch(patch);
-    setLastAction(`Applied edit: "${prompt}"`);
+    setLastAction(`Applied directive: "${prompt}"`);
     setPrompt("");
   };
 
@@ -34,19 +34,22 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
     if (isLoading) return;
     const patch = await parseConstraintEdit(text);
     onApplyPatch(patch);
-    setLastAction(`Applied edit: "${text}"`);
+    setLastAction(`Applied directive: "${text}"`);
   };
 
   return (
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 shadow-xl backdrop-blur-md space-y-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-semibold text-zinc-200">
-          <MessageSquare className="w-4 h-4 text-violet-400" />
-          <span>Conversational Constraint Editor</span>
+    <div className="card-dope p-6 sm:p-8 space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#f7f9fa]/10 pb-4">
+        <div className="flex items-center gap-2">
+          <MessageSquare className="w-4 h-4 text-[#af50ff]" />
+          <span className="text-xs font-mono uppercase tracking-[0.14em] text-[#f7f9fa]">
+            NATURAL LANGUAGE CONSTRAINT AGENT
+          </span>
         </div>
-        <span className="text-[10px] text-zinc-500 font-medium">
-          Zero Hallucinated Numbers &bull; Grounded in Solver
-        </span>
+        <div className="flex items-center gap-1.5 text-xs font-mono text-[#828384]">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#af50ff]" />
+          <span>ZERO HALLUCINATIONS GROUNDED</span>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="relative">
@@ -55,22 +58,23 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
           suppressHydrationWarning
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="e.g. 'Cut budget to $180k and add an Austin local act'..."
-          className="w-full rounded-xl border border-zinc-800 bg-zinc-950/80 px-4 py-2.5 pr-10 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 transition"
+          placeholder="Type constraint: e.g. 'Cut budget to $180k and add an Austin local act'..."
+          className="w-full rounded-[6px] bg-[#f7f9fa]/[0.05] border border-[#f7f9fa]/20 px-4 py-3 pr-14 text-sm text-[#f7f9fa] placeholder:text-[#828384] focus:outline-none focus:border-[#af50ff] transition font-mono"
         />
         <button
           type="submit"
           suppressHydrationWarning
           disabled={!prompt.trim() || isLoading}
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-violet-400 hover:text-white hover:bg-violet-600/30 transition disabled:opacity-30"
+          className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-[6px] bg-[#af50ff] text-[#090909] font-mono font-medium text-xs flex items-center gap-1 hover:brightness-110 transition disabled:opacity-20"
         >
-          <ArrowRight className="w-4 h-4" />
+          <span>SEND</span>
+          <ArrowRight className="w-3 h-3" />
         </button>
       </form>
 
-      <div className="flex flex-wrap items-center gap-1.5 text-xs">
-        <span className="text-[10px] text-zinc-500 flex items-center gap-1">
-          <Sparkles className="w-2.5 h-2.5 text-violet-400" /> Suggestions:
+      <div className="flex flex-wrap items-center gap-2 text-xs">
+        <span className="text-[#828384] font-mono flex items-center gap-1 text-[11px] uppercase">
+          <Sparkles className="w-3 h-3 text-[#af50ff]" /> DIRECTIVES:
         </span>
         {quickPrompts.map((q) => (
           <button
@@ -78,7 +82,7 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
             type="button"
             suppressHydrationWarning
             onClick={() => handleQuickClick(q)}
-            className="rounded-lg border border-zinc-800 bg-zinc-950/40 px-2.5 py-1 text-[11px] text-zinc-400 hover:border-violet-500/40 hover:text-zinc-200 transition"
+            className="rounded-[6px] px-3 py-1 bg-[#f7f9fa]/[0.04] border border-[#f7f9fa]/12 text-[#828384] font-mono text-[11px] hover:border-[#af50ff]/50 hover:text-[#f7f9fa] transition"
           >
             {q}
           </button>
@@ -86,8 +90,8 @@ export function AgentPanel({ onApplyPatch, isLoading }: AgentPanelProps) {
       </div>
 
       {lastAction && (
-        <div className="text-[11px] text-emerald-400 font-medium pt-1">
-          &bull; {lastAction}
+        <div className="text-xs font-mono text-[#af50ff] pt-2 border-t border-[#f7f9fa]/10">
+          &bull; {lastAction} (deterministic re-solve complete)
         </div>
       )}
     </div>

@@ -1,40 +1,123 @@
-import React from "react";
-import { Sparkles, BarChart3, ShieldCheck } from "lucide-react";
+"use client";
 
-export function Header() {
+import React from "react";
+import { Terminal, Layers, Calendar, Printer } from "lucide-react";
+
+interface HeaderProps {
+  onOpenMatrix?: () => void;
+  onOpenTimetable?: () => void;
+  onOpenPoster?: () => void;
+  onScrollToTerminal?: () => void;
+  onScrollToQloo?: () => void;
+  onScrollToFeatures?: () => void;
+  hasReceipt?: boolean;
+}
+
+export function Header({
+  onOpenMatrix,
+  onOpenTimetable,
+  onOpenPoster,
+  onScrollToTerminal,
+  onScrollToQloo,
+  onScrollToFeatures,
+  hasReceipt = false,
+}: HeaderProps) {
   return (
-    <header className="border-b border-zinc-800/80 bg-zinc-950/40 backdrop-blur-md sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 frosted-nav-bar px-4 sm:px-8 h-12 flex items-center transition-all duration-300">
+      <div className="max-w-[1200px] w-full mx-auto flex items-center justify-between gap-6">
+        {/* Brand Wordmark (Left) */}
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-600 via-indigo-600 to-emerald-500 p-0.5 shadow-lg shadow-violet-500/20">
-            <div className="h-full w-full bg-zinc-950 rounded-[10px] flex items-center justify-center">
-              <span className="font-black text-transparent bg-clip-text bg-gradient-to-tr from-violet-400 to-emerald-400 text-sm">
-                B
-              </span>
-            </div>
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-base font-bold tracking-tight text-white">The Bill</span>
-              <span className="text-[10px] font-medium tracking-wide uppercase px-2 py-0.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300">
-                Taste Graph Optimizer
-              </span>
-            </div>
-            <p className="text-xs text-zinc-400">
-              Budget-constrained festival lineup portfolio grounded in Qloo
-            </p>
-          </div>
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="flex items-center gap-2 text-left group"
+          >
+            <span className="text-[14px] sm:text-[15px] font-medium tracking-tight text-[#f7f9fa] group-hover:text-white transition">
+              THE BILL
+            </span>
+            <span className="hidden sm:inline-block text-[9px] font-mono uppercase tracking-[0.14em] text-[#828384] border-l border-[#6b6b6b]/60 pl-2">
+              QLOO TERMINAL
+            </span>
+          </button>
         </div>
 
-        <div className="flex items-center gap-4 text-xs">
-          <div className="hidden sm:flex items-center gap-1.5 text-zinc-400">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Deterministic Solver</span>
+        {/* Center Nav Items (Whyte Inktrap 12px uppercase, 0.07em tracking) */}
+        <nav className="hidden md:flex items-center gap-6 text-[11px] sm:text-[12px] uppercase tracking-[0.07em]">
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="text-[#828384] hover:text-[#f7f9fa] py-1 transition hover:underline underline-offset-4"
+          >
+            Overview
+          </button>
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={onScrollToFeatures}
+            className="text-[#828384] hover:text-[#f7f9fa] py-1 transition hover:underline underline-offset-4"
+          >
+            Disciplines
+          </button>
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={onScrollToQloo}
+            className="text-[#828384] hover:text-[#f7f9fa] py-1 transition hover:underline underline-offset-4"
+          >
+            Taste Graph
+          </button>
+
+          {hasReceipt && (
+            <div className="flex items-center gap-4 pl-3 border-l border-[#6b6b6b]/50">
+              <button
+                type="button"
+                suppressHydrationWarning
+                onClick={onOpenMatrix}
+                className="text-[#828384] hover:text-[#af50ff] py-1 transition flex items-center gap-1.5"
+              >
+                <Layers className="w-3.5 h-3.5 text-[#af50ff]" />
+                Matrix
+              </button>
+              <button
+                type="button"
+                suppressHydrationWarning
+                onClick={onOpenTimetable}
+                className="text-[#828384] hover:text-[#f7f9fa] py-1 transition flex items-center gap-1.5"
+              >
+                <Calendar className="w-3.5 h-3.5 text-[#828384]" />
+                Timetable
+              </button>
+              <button
+                type="button"
+                suppressHydrationWarning
+                onClick={onOpenPoster}
+                className="text-[#828384] hover:text-[#f7f9fa] py-1 transition flex items-center gap-1.5"
+              >
+                <Printer className="w-3.5 h-3.5 text-[#828384]" />
+                Poster
+              </button>
+            </div>
+          )}
+        </nav>
+
+        {/* Right CTA Actions */}
+        <div className="flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-0.5 rounded-[5px] bg-[#f7f9fa]/[0.06] border border-[#f7f9fa]/20 text-[10px] font-mono text-[#828384]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#af50ff] animate-pulse" />
+            <span>575M+ VECTORS</span>
           </div>
-          <div className="hidden md:flex items-center gap-1.5 text-zinc-400">
-            <BarChart3 className="w-4 h-4 text-indigo-400" />
-            <span>Max-Coverage Knapsack</span>
-          </div>
+
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={onScrollToTerminal}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[6px] text-xs font-mono tracking-tight text-[#f7f9fa] bg-[#090909] border border-[#f7f9fa] hover:bg-[#171717] hover:border-white transition"
+          >
+            <Terminal className="w-3.5 h-3.5 text-[#af50ff]" />
+            <span>OPEN SOLVER</span>
+          </button>
         </div>
       </div>
     </header>

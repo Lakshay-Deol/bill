@@ -2,7 +2,7 @@
 
 import React from "react";
 import { BookedSlot } from "@/lib/solver";
-import { Sparkles, MapPin, Edit2 } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 interface PosterProps {
   stages: Array<{ stageNumber: number; stageName: string; slots: BookedSlot[] }>;
@@ -18,20 +18,26 @@ export function Poster({ stages, onSelectSlot, selectedSlotId, onOverrideFee }: 
         {stages.map((stage) => (
           <div
             key={stage.stageNumber}
-            className="rounded-2xl border border-zinc-800/90 bg-gradient-to-b from-zinc-900/80 to-zinc-950/90 p-5 shadow-2xl backdrop-blur-md"
+            className="card-dope p-6 sm:p-8 space-y-6"
           >
-            <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-zinc-800">
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-violet-400"></span>
-                <h3 className="text-sm font-bold tracking-wider uppercase text-zinc-200">
+            {/* Stage Title in Whyte Inktrap Mono */}
+            <div className="flex items-center justify-between pb-4 border-b border-[#f7f9fa]/10">
+              <div className="flex items-center gap-2.5">
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    stage.stageNumber === 1 ? "bg-[#af50ff]" : "bg-[#f7f9fa]"
+                  }`}
+                />
+                <h3 className="text-sm font-mono font-medium tracking-[0.14em] uppercase text-[#f7f9fa]">
                   {stage.stageName}
                 </h3>
               </div>
-              <span className="text-[11px] text-zinc-500 font-medium">
-                {stage.slots.length} Booked Slots
+              <span className="text-[11px] font-mono text-[#828384] tracking-wider uppercase">
+                {stage.slots.length} SLOTS
               </span>
             </div>
 
+            {/* Acts List */}
             <div className="space-y-3">
               {stage.slots.map((slot, idx) => {
                 const isHeadliner = idx === 0 && stage.stageNumber === 1;
@@ -41,32 +47,37 @@ export function Poster({ stages, onSelectSlot, selectedSlotId, onOverrideFee }: 
                   <div
                     key={slot.id}
                     onClick={() => onSelectSlot(slot)}
-                    className={`group relative rounded-xl border p-3.5 transition cursor-pointer ${
+                    className={`rounded-[8px] p-4 border transition cursor-pointer ${
                       isSelected
-                        ? "border-violet-500 bg-violet-950/30 ring-1 ring-violet-500"
-                        : "border-zinc-800/80 bg-zinc-900/40 hover:border-zinc-700 hover:bg-zinc-800/50"
+                        ? "border-[#af50ff] bg-[#af50ff]/[0.08]"
+                        : "border-[#f7f9fa]/12 bg-[#090909] hover:border-[#af50ff]/40 hover:bg-[#f7f9fa]/[0.02]"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <div>
+                      <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <span
-                            className={`font-black tracking-tight text-white ${
-                              isHeadliner ? "text-lg sm:text-xl text-violet-200" : "text-sm sm:text-base"
+                            className={`font-normal tracking-tight text-[#f7f9fa] ${
+                              isHeadliner
+                                ? "text-lg sm:text-xl font-medium"
+                                : "text-sm sm:text-base"
                             }`}
                           >
                             {slot.name}
                           </span>
                           {slot.isLocal && (
-                            <span className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <span className="inline-flex items-center gap-1 rounded-[4px] px-1.5 py-0.5 text-[9px] font-mono uppercase bg-[#f7f9fa]/[0.06] text-[#af50ff] border border-[#af50ff]/30">
                               <MapPin className="w-2.5 h-2.5" /> Local
                             </span>
                           )}
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-1.5 mt-1.5 text-[11px] text-zinc-400">
+                        <div className="flex flex-wrap items-center gap-1.5 text-xs text-[#828384] font-mono">
                           {slot.genres.slice(0, 3).map((g) => (
-                            <span key={g} className="rounded-md bg-zinc-800/60 px-1.5 py-0.5">
+                            <span
+                              key={g}
+                              className="rounded-[4px] bg-[#f7f9fa]/[0.04] border border-[#f7f9fa]/10 px-2 py-0.5 text-[10px] uppercase"
+                            >
                               {g}
                             </span>
                           ))}
@@ -74,12 +85,13 @@ export function Poster({ stages, onSelectSlot, selectedSlotId, onOverrideFee }: 
                       </div>
 
                       {/* Est Fee with Invariant 7 marker */}
-                      <div className="text-right flex flex-col items-end">
-                        <div className="flex items-center gap-1 text-xs font-semibold text-zinc-200">
-                          <span className="text-[10px] uppercase text-zinc-500 font-medium">est.</span>
+                      <div className="text-right flex flex-col items-end flex-shrink-0">
+                        <div className="flex items-center gap-1 text-xs font-mono text-[#f7f9fa]">
+                          <span className="text-[10px] uppercase text-[#828384]">est.</span>
                           <span>${slot.fee.toLocaleString("en-US")}</span>
                           <button
                             type="button"
+                            suppressHydrationWarning
                             title="Override estimated fee"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -91,28 +103,14 @@ export function Poster({ stages, onSelectSlot, selectedSlotId, onOverrideFee }: 
                                 onOverrideFee(slot.id, Number(input));
                               }
                             }}
-                            className="opacity-0 group-hover:opacity-100 p-0.5 text-zinc-500 hover:text-zinc-300 transition"
+                            className="ml-1 text-[10px] uppercase text-[#828384] hover:text-[#af50ff] underline"
                           >
-                            <Edit2 className="w-3 h-3" />
+                            edit
                           </button>
                         </div>
-                        <span className="text-[10px] text-zinc-500 mt-0.5">user-overridable</span>
-                      </div>
-                    </div>
-
-                    <div className="mt-3 pt-2.5 border-t border-zinc-800/60 flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-1 text-emerald-400 font-medium">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>+{slot.marginalUnique.toLocaleString("en-US")} unique fans</span>
-                      </div>
-                      <div className="text-[11px] text-zinc-400">
-                        {slot.closestActOverlap > 0 ? (
-                          <span>
-                            {(slot.closestActOverlap * 100).toFixed(0)}% tasteOverlap
-                          </span>
-                        ) : (
-                          <span className="text-zinc-500">0% tasteOverlap</span>
-                        )}
+                        <span className="text-[10px] text-[#828384] font-mono mt-0.5">
+                          +{(slot.marginalUnique ?? 0).toLocaleString("en-US")} reach
+                        </span>
                       </div>
                     </div>
                   </div>

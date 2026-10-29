@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sliders, MapPin, Users, DollarSign, Music, RefreshCw } from "lucide-react";
+import { Sliders, MapPin, DollarSign, Users, RefreshCw } from "lucide-react";
 
 export interface BriefState {
   market: string;
@@ -29,7 +29,7 @@ export function BriefControls({
 }: BriefControlsProps) {
   const presets = [
     {
-      name: "Austin Indie 2026",
+      name: "Austin Indie ($250k)",
       market: "Austin",
       budget: 250000,
       capacity: 5000,
@@ -38,7 +38,16 @@ export function BriefControls({
       seeds: ["Phoebe Bridgers", "boygenius", "Lucy Dacus"],
     },
     {
-      name: "Brooklyn Warehouse",
+      name: "Tokyo Shibuya ($320k)",
+      market: "Tokyo",
+      budget: 320000,
+      capacity: 6500,
+      actCount: 8,
+      requireLocal: true,
+      seeds: ["Massive Attack", "Portishead", "Cornelius"],
+    },
+    {
+      name: "Brooklyn Warehouse ($180k)",
       market: "New York",
       budget: 180000,
       capacity: 3500,
@@ -47,7 +56,7 @@ export function BriefControls({
       seeds: ["Big Thief", "Adrianne Lenker", "Faye Webster"],
     },
     {
-      name: "Chicago Lakefront",
+      name: "Chicago Lakefront ($350k)",
       market: "Chicago",
       budget: 350000,
       capacity: 8000,
@@ -58,142 +67,177 @@ export function BriefControls({
   ];
 
   return (
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 shadow-xl backdrop-blur-md">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-zinc-800/80 gap-3">
-        <div className="flex items-center gap-2 text-zinc-100 font-semibold text-sm">
-          <Sliders className="w-4 h-4 text-violet-400" />
-          <span>Promoter Brief Parameters</span>
+    <div className="card-dope p-6 sm:p-10 space-y-8">
+      {/* Top Header & Presets */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-6 border-b border-[#f7f9fa]/10 gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-[#f7f9fa]/[0.06] border border-[#f7f9fa]/20 flex items-center justify-center text-[#af50ff]">
+            <Sliders className="w-4 h-4" />
+          </div>
+          <div>
+            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#af50ff]">
+              FLIGHT PARAMETERS
+            </div>
+            <h3 className="text-lg font-normal text-[#f7f9fa] tracking-tight">
+              Promoter Brief & Constraints
+            </h3>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] text-zinc-500 mr-1">Presets:</span>
-          {presets.map((p) => (
-            <button
-              key={p.name}
-              type="button"
-              suppressHydrationWarning
-              disabled={isLoading}
-              onClick={() => {
-                if (onSelectPreset) {
-                  onSelectPreset(p);
-                } else {
-                  onChange(p);
-                }
-              }}
-              className="text-xs px-2.5 py-1 rounded-lg border border-zinc-800 bg-zinc-800/40 text-zinc-300 hover:border-violet-500/50 hover:text-white transition disabled:opacity-50"
-            >
-              {p.name}
-            </button>
-          ))}
+
+        {/* Presets in Ghost Pill style */}
+        <div className="flex flex-wrap items-center gap-2">
+          {presets.map((p) => {
+            const isSelected = brief.market.toLowerCase() === p.market.toLowerCase();
+            return (
+              <button
+                key={p.name}
+                type="button"
+                suppressHydrationWarning
+                disabled={isLoading}
+                onClick={() => {
+                  if (onSelectPreset) {
+                    onSelectPreset(p);
+                  } else {
+                    onChange(p);
+                  }
+                }}
+                className={`text-[12px] font-mono px-3.5 py-1.5 rounded-full transition border ${
+                  isSelected
+                    ? "bg-[#af50ff] text-[#090909] font-medium border-[#af50ff]"
+                    : "bg-[#090909] text-[#828384] border-[#f7f9fa]/15 hover:border-[#f7f9fa]/40 hover:text-[#f7f9fa]"
+                } disabled:opacity-40`}
+              >
+                {p.name}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Market */}
-        <div>
-          <label className="text-xs font-medium text-zinc-400 flex items-center gap-1.5 mb-1.5">
-            <MapPin className="w-3.5 h-3.5 text-zinc-400" /> Market
+      {/* Inputs Grid with 6px control radius */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Target Market */}
+        <div className="space-y-2">
+          <label className="text-xs font-mono text-[#828384] uppercase tracking-wider flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 text-[#af50ff]" /> Target Market
           </label>
           <input
             type="text"
             suppressHydrationWarning
             value={brief.market}
             onChange={(e) => onChange({ market: e.target.value })}
-            className="w-full rounded-xl border border-zinc-800 bg-zinc-950/80 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:border-violet-500 transition"
-            placeholder="e.g. Austin, TX"
+            className="w-full rounded-[6px] bg-[#f7f9fa]/[0.05] border border-[#f7f9fa]/20 px-3.5 py-2.5 text-sm text-[#f7f9fa] focus:outline-none focus:border-[#af50ff] transition font-mono"
+            placeholder="e.g. Austin"
           />
         </div>
 
         {/* Talent Budget */}
-        <div>
-          <div className="flex justify-between items-center mb-1.5">
-            <label className="text-xs font-medium text-zinc-400 flex items-center gap-1.5">
-              <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Talent Budget
+        <div className="space-y-2">
+          <div className="flex justify-between items-center text-xs font-mono">
+            <label className="text-[#828384] uppercase tracking-wider flex items-center gap-1.5">
+              <DollarSign className="w-3.5 h-3.5 text-[#af50ff]" /> Talent Budget
             </label>
-            <span className="text-xs font-bold text-emerald-400">
+            <span className="font-bold text-[#f7f9fa]">
               ${brief.budget.toLocaleString("en-US")}
             </span>
           </div>
           <input
             type="range"
+            suppressHydrationWarning
             min={50000}
             max={1000000}
             step={10000}
             value={brief.budget}
             onChange={(e) => onChange({ budget: Number(e.target.value) })}
-            className="w-full accent-emerald-500 cursor-pointer"
+            className="w-full accent-[#af50ff] bg-[#f7f9fa]/10 h-1.5 rounded-[6px] cursor-pointer"
           />
         </div>
 
-        {/* Capacity */}
-        <div>
-          <div className="flex justify-between items-center mb-1.5">
-            <label className="text-xs font-medium text-zinc-400 flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-indigo-400" /> Cap Size
+        {/* Venue Capacity */}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center text-xs font-mono">
+            <label className="text-[#828384] uppercase tracking-wider flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-[#828384]" /> Capacity
             </label>
-            <span className="text-xs font-bold text-indigo-400">
-              {brief.capacity.toLocaleString("en-US")} fans
+            <span className="font-bold text-[#f7f9fa]">
+              {brief.capacity.toLocaleString("en-US")}
             </span>
           </div>
           <input
             type="range"
+            suppressHydrationWarning
             min={1000}
-            max={25000}
+            max={50000}
             step={500}
             value={brief.capacity}
             onChange={(e) => onChange({ capacity: Number(e.target.value) })}
-            className="w-full accent-indigo-500 cursor-pointer"
+            className="w-full accent-[#af50ff] bg-[#f7f9fa]/10 h-1.5 rounded-[6px] cursor-pointer"
           />
         </div>
 
-        {/* Acts Count */}
-        <div>
-          <div className="flex justify-between items-center mb-1.5">
-            <label className="text-xs font-medium text-zinc-400 flex items-center gap-1.5">
-              <Music className="w-3.5 h-3.5 text-violet-400" /> Total Acts
+        {/* Lineup Size */}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center text-xs font-mono">
+            <label className="text-[#828384] uppercase tracking-wider">
+              Lineup Size
             </label>
-            <span className="text-xs font-bold text-violet-400">{brief.actCount} acts</span>
+            <span className="font-bold text-[#f7f9fa]">
+              {brief.actCount} Acts
+            </span>
           </div>
-          <div className="flex items-center gap-1.5">
-            {[4, 6, 8, 10, 12].map((cnt) => (
-              <button
-                key={cnt}
-                type="button"
-                suppressHydrationWarning
-                onClick={() => onChange({ actCount: cnt })}
-                className={`flex-1 py-1 text-xs rounded-lg border font-medium transition ${
-                  brief.actCount === cnt
-                    ? "border-violet-500 bg-violet-600/30 text-white"
-                    : "border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:text-zinc-200"
-                }`}
-              >
-                {cnt}
-              </button>
-            ))}
-          </div>
+          <input
+            type="range"
+            suppressHydrationWarning
+            min={4}
+            max={16}
+            step={1}
+            value={brief.actCount}
+            onChange={(e) => onChange({ actCount: Number(e.target.value) })}
+            className="w-full accent-[#af50ff] bg-[#f7f9fa]/10 h-1.5 rounded-[6px] cursor-pointer"
+          />
         </div>
       </div>
 
-      <div className="mt-4 pt-4 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <label className="flex items-center gap-2 cursor-pointer text-xs text-zinc-300">
-          <input
-            type="checkbox"
-            suppressHydrationWarning
-            checked={brief.requireLocal}
-            onChange={(e) => onChange({ requireLocal: e.target.checked })}
-            className="rounded border-zinc-700 bg-zinc-900 text-violet-600 focus:ring-violet-500 w-4 h-4"
-          />
-          <span>Require at least one market-local act on the bill</span>
-        </label>
+      {/* Bottom Seed Entities & Solve Dispatch */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between pt-6 border-t border-[#f7f9fa]/10 gap-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-mono text-[#828384] uppercase tracking-wider">
+            SEEDS:
+          </span>
+          {brief.seeds.map((seed, idx) => (
+            <span
+              key={idx}
+              className="text-xs px-3 py-1 rounded-[6px] bg-[#f7f9fa]/[0.05] border border-[#f7f9fa]/15 text-[#f7f9fa] font-mono"
+            >
+              {seed}
+            </span>
+          ))}
 
+          {/* Local opener toggle */}
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={() => onChange({ requireLocal: !brief.requireLocal })}
+            className={`text-xs px-3 py-1 rounded-[6px] border transition font-mono ml-2 ${
+              brief.requireLocal
+                ? "bg-[#af50ff]/10 text-[#af50ff] border-[#af50ff]/40"
+                : "bg-transparent text-[#828384] border-[#f7f9fa]/15"
+            }`}
+          >
+            {brief.requireLocal ? "LOCAL OPENER: REQUIRED" : "LOCAL OPENER: OPTIONAL"}
+          </button>
+        </div>
+
+        {/* Re-solve CTA Button (Signal Violet primary action) */}
         <button
           type="button"
+          suppressHydrationWarning
           onClick={onSolve}
           disabled={isLoading}
-          suppressHydrationWarning
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-violet-500/25 hover:from-violet-500 hover:to-indigo-500 transition disabled:opacity-50"
+          className="btn-signal-violet text-xs py-2.5 px-6 self-end md:self-auto uppercase tracking-wider font-mono font-bold"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />
-          <span>{isLoading ? "Optimizing Portfolio..." : "Solve Lineup"}</span>
+          <span>{isLoading ? "SOLVING PORTFOLIO..." : "SOLVE OPTIMAL LINEUP"}</span>
         </button>
       </div>
     </div>

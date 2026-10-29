@@ -1,13 +1,274 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090a0f;
-  --foreground: #f4f4f5;
+  /* Colors */
+  --color-near-black: #090909;
+  --color-almost-white: #f7f9fa;
+  --color-soft-white: #f0f0f0;
+  --color-steel: #828384;
+  --color-graphite: #474747;
+  --color-iron: #423738;
+  --color-ash: #6b6b6b;
+  --color-signal-violet: #af50ff;
+  --color-lavender-mist: #e1bdff;
+
+  /* Typography — Font Families */
+  --font-whyte-inktrap: 'Whyte Inktrap', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-whyte-inktrap-mono: 'Whyte Inktrap Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-grandslang: 'GrandSlang', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-system-ui: 'system-ui', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-karla: 'Karla', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 10px;
+  --leading-caption: 1;
+  --tracking-caption: 1.8px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.5;
+  --tracking-body-sm: 0px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --tracking-body: 0px;
+  --text-subheading: 20px;
+  --leading-subheading: 1;
+  --tracking-subheading: -0.2px;
+  --text-heading-sm: 32px;
+  --leading-heading-sm: 1.2;
+  --tracking-heading-sm: -0.32px;
+  --text-heading: 48px;
+  --leading-heading: 1.2;
+  --tracking-heading: -0.48px;
+  --text-heading-lg: 64px;
+  --leading-heading-lg: 1.2;
+  --tracking-heading-lg: -0.64px;
+  --text-section-stamp: 74px;
+  --leading-section-stamp: 0.9;
+  --tracking-section-stamp: 14.8px;
+  --text-display: 88px;
+  --leading-display: 0.8;
+  --tracking-display: -2.64px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 120px;
+  --card-padding: 40px;
+  --element-gap: 16px;
+
+  /* Border Radius */
+  --radius-lg: 8px;
+  --radius-2xl: 19.2px;
+  --radius-full-2: 1584px;
+
+  /* Named Radii */
+  --radius-cards: 19.2px;
+  --radius-pills: 1584px;
+  --radius-buttons: 8px;
+  --radius-smallcontrols: 6px;
+
+  /* Surfaces */
+  --surface-void-canvas: #090909;
+  --surface-translucent-panel: #333248b3;
+  --surface-iron-wash: #423738;
+  --surface-violet-bloom: #af50ff;
+
+  --shadow-subtle: rgba(16, 24, 40, 0.05) 0px 1px 2px 0px;
+}
+
+@theme {
+  --color-near-black: #090909;
+  --color-almost-white: #f7f9fa;
+  --color-soft-white: #f0f0f0;
+  --color-steel: #828384;
+  --color-graphite: #474747;
+  --color-iron: #423738;
+  --color-ash: #6b6b6b;
+  --color-signal-violet: #af50ff;
+  --color-lavender-mist: #e1bdff;
+
+  --font-whyte-inktrap: 'Whyte Inktrap', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-whyte-inktrap-mono: 'Whyte Inktrap Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-grandslang: 'GrandSlang', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-system-ui: 'system-ui', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-karla: 'Karla', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --text-caption: 10px;
+  --text-body-sm: 14px;
+  --text-body: 16px;
+  --text-subheading: 20px;
+  --text-heading-sm: 32px;
+  --text-heading: 48px;
+  --text-heading-lg: 64px;
+  --text-section-stamp: 74px;
+  --text-display: 88px;
+
+  --radius-lg: 8px;
+  --radius-2xl: 19.2px;
+  --radius-full-2: 1584px;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: #f7f9fa;
+  background-color: #090909;
+  font-family: var(--font-whyte-inktrap);
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Stamped section signpost */
+.stamp-heading {
+  font-family: var(--font-whyte-inktrap-mono);
+  font-size: clamp(32px, 5.5vw, 74px);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #f0f0f0;
+  line-height: 0.9;
+  font-weight: 400;
+}
+
+/* GrandSlang italic display serif */
+.font-grandslang-italic {
+  font-family: var(--font-grandslang), Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+}
+
+/* Frosted Nav Bar */
+.frosted-nav-bar {
+  background: rgba(51, 50, 72, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #6b6b6b;
+}
+
+/* Filled Action Button */
+.btn-filled-action {
+  background: #090909;
+  border: 1px solid #f7f9fa;
+  border-radius: 8px;
+  color: #f7f9fa;
+  font-family: var(--font-whyte-inktrap);
+  font-size: 16px;
+  font-weight: 400;
+  padding: 12px 24px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-filled-action:hover {
+  background: #171717;
+  border-color: #ffffff;
+}
+
+/* Signal Violet Filled Button */
+.btn-signal-violet {
+  background: #af50ff;
+  color: #090909;
+  border-radius: 8px;
+  font-family: var(--font-whyte-inktrap);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 24px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-signal-violet:hover {
+  filter: brightness(1.15) drop-shadow(0 0 16px rgba(175, 80, 255, 0.45));
+}
+
+/* Ghost Pill Button */
+.btn-ghost-pill {
+  background: rgba(237, 195, 196, 0.05);
+  border-radius: 1584px;
+  border: none;
+  color: #f7f9fa;
+  font-family: var(--font-whyte-inktrap);
+  font-size: 15px;
+  font-weight: 400;
+  padding: 16px 32px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-ghost-pill:hover {
+  background: rgba(237, 195, 196, 0.12);
+  color: #ffffff;
+}
+
+/* Compact Outlined Button */
+.btn-compact-outlined {
+  background: rgba(247, 249, 250, 0.08);
+  border: 1px solid #f7f9fa;
+  border-radius: 6px;
+  padding: 9px 15px;
+  color: #f7f9fa;
+  font-family: var(--font-whyte-inktrap);
+  font-size: 13px;
+  font-weight: 400;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-compact-outlined:hover {
+  background: rgba(247, 249, 250, 0.16);
+}
+
+/* Boarding Pass Hero Card */
+.card-boarding-pass {
+  border-radius: 19.2px;
+  background: rgba(237, 195, 196, 0.05);
+  border: 1px solid rgba(247, 249, 250, 0.2);
+  padding: 40px;
+}
+
+/* Standard Dope Card Surface */
+.card-dope {
+  border-radius: 19.2px;
+  background: #090909;
+  border: 1px solid rgba(247, 249, 250, 0.12);
+  padding: 40px;
+}
+
+/* Violet Bloom Feature Card (1 per page) */
+.card-violet-bloom {
+  border-radius: 19.2px;
+  background: #af50ff;
+  color: #f7f9fa;
+  padding: 40px;
+}
+
+/* Infinite Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
