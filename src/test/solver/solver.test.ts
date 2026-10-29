@@ -1,5 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { solveLineup, solveNaiveBaseline } from "@/lib/solver";
+import {
+  solveLineup,
+  solveNaiveBaseline,
+  computeEfficientFrontier,
+  computeRobustness,
+  computeUncertaintyBands,
+  computeSlotAlternatives,
+  assignStages,
+} from "@/lib/solver";
 import { feeEstimate, getReferenceBudget } from "@/lib/model";
 import { SYNTHETIC_PHOEBE_BRIDGERS } from "@/lib/fixtures/synthetic-artists";
 
@@ -211,5 +219,130 @@ describe("Solver - Hard Invariants", () => {
 
     expect(receipt.naiveComparison?.maxTasteOverlap).toBeDefined();
     expect(receipt.naiveComparison?.fansPerDollar).toBeGreaterThan(0);
+  });
+
+  it("Efficient frontier sweeps budget in 12 steps under 1500ms", () => {
+    const frontier = computeEfficientFrontier(
+      {
+        universe: testUniverse,
+        overlap: testOverlap,
+        budget,
+        capacity,
+        actCount,
+      },
+      12
+    );
+
+    expect(frontier.points.length).toBe(12);
+    expect(frontier.wallTimeMs).toBeLessThan(1500);
+    // Budgets should be monotonically increasing
+    for (let i = 1; i < frontier.points.length; i++) {
+      expect(frontier.points[i]!.budget).toBeGreaterThanOrEqual(frontier.points[i - 1]!.budget);
+    }
+  });
+
+  it("Robustness analysis produces stable/swappable statuses across perturbed runs", () => {
+    const receipt = solveLineup({
+      universe: testUniverse,
+      overlap: testOverlap,
+      budget,
+      capacity,
+      actCount: 3,
+    });
+
+    const rob = computeRobustness(
+      {
+        universe: testUniverse,
+        overlap: testOverlap,
+        budget,
+        capacity,
+        actCount: 3,
+      },
+      receipt.lineup,
+      10
+    );
+
+    expect(rob.acts.length).toBe(receipt.lineup.length);
+    rob.acts.forEach((act) => {
+      expect(act.selectionRate).toBeGreaterThanOrEqual(0);
+      expect(act.selectionRate).toBeLessThanOrEqual(100);
+      expect(["stable", "swappable"]).toContain(act.status);
+    });
+  });
+
+  it("Uncertainty bands produce ordered p10 <= p50 <= p90", () => {
+    const receipt = solveLineup({
+      universe: testUniverse,
+      overlap: testOverlap,
+      budget,
+      capacity,
+      actCount: 3,
+    });
+
+    const bands = computeUncertaintyBands(receipt.lineup, testOverlap, capacity, 100);
+    expect(bands.isModeled).toBe(true);
+    expect(bands.p10).toBeLessThanOrEqual(bands.p50);
+    expect(bands.p50).toBeLessThanOrEqual(bands.p90);
+  });
+
+  it("Slot alternatives compute top 3 options with deltaFans and deltaCost", () => {
+    const receipt = solveLineup({
+      universe: testUniverse,
+      overlap: testOverlap,
+      budget,
+      capacity,
+      actCount: 3,
+    });
+
+    const alts = computeSlotAlternatives(
+      {
+        universe: testUniverse,
+        overlap: testOverlap,
+        budget,
+        capacity,
+        actCount: 3,
+      },
+      receipt.lineup,
+      receipt.totalSpent
+    );
+
+    expect(alts.size).toBe(receipt.lineup.length);
+    for (const [slotId, slotAlts] of alts.entries()) {
+      expect(slotAlts.length).toBeLessThanOrEqual(3);
+      slotAlts.forEach((alt) => {
+        expect(alt.deltaFans).toBeDefined();
+        expect(alt.deltaCost).toBeDefined();
+        expect(alt.id).not.toBe(slotId);
+      });
+    }
+  });
+
+  it("Exclude constraint strictly bans acts from selection", () => {
+    const excludedId = "urn:entity:artist:synthetic-boygenius";
+    const receipt = solveLineup({
+      universe: testUniverse,
+      overlap: testOverlap,
+      budget: 300000,
+      capacity,
+      actCount: 3,
+      exclude: [excludedId],
+    });
+
+    const ids = receipt.lineup.map((a) => a.id);
+    expect(ids).not.toContain(excludedId);
+  });
+
+  it("Assign stages spreads high-overlap acts apart", () => {
+    const receipt = solveLineup({
+      universe: testUniverse,
+      overlap: testOverlap,
+      budget,
+      capacity,
+      actCount: 4,
+    });
+
+    const stageRes = assignStages(receipt.lineup, 2, 2, testOverlap);
+    expect(stageRes.stages.length).toBe(2);
+    expect(stageRes.days.length).toBe(2);
   });
 });
