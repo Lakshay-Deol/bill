@@ -43,8 +43,8 @@ export function LandingHero({
       <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#dfb7ff]/15 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#cbf230]/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Main Editorial Text (eyebrow removed) */}
-      <div className="relative z-10 max-w-3xl py-4 sm:py-6 space-y-6">
+      {/* Main Editorial Text */}
+      <div className="relative z-10 max-w-3xl pt-8 sm:pt-10 pb-4 sm:pb-6 space-y-6">
         <div className="space-y-3">
           <h1 className="font-syne text-4xl sm:text-6xl md:text-[74px] uppercase text-[#f1eff0] tracking-tighter leading-[0.95] drop-shadow-md">
             Lineups are{" "}

@@ -111,7 +111,7 @@ export default function Home() {
         hasReceipt={!!receipt}
       />
 
-      <main className="relative z-10 flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-32 space-y-16">
+      <main className="relative z-10 flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-24 space-y-16">
         {/* Section 1 & 2: Hero Section */}
         <div ref={heroRef} id="hero">
           <LandingHero
@@ -163,29 +163,6 @@ export default function Home() {
           />
         </div>
       </main>
-
-      {/* Floating Dock Benchmark Bar */}
-      <aside className="fixed bottom-4 left-4 right-4 z-40 max-w-[1440px] mx-auto pointer-events-none">
-        <div className="bg-[#070709]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-5 py-2.5 shadow-2xl pointer-events-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-[#a69fa9] font-mono text-xs">
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-[#cbf230] shadow-[0_0_8px_#cbf230]" />
-            <span>
-              API ENDPOINT: <code className="text-[#f1eff0] bg-white/5 px-1.5 py-0.5 rounded">POST /v2/solve/portfolio-lineup</code>
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            {apiLatency !== null && (
-              <span>
-                Execution: <strong className="text-[#cbf230]">{apiLatency}ms</strong>
-              </span>
-            )}
-            <span>Seed: <code className="text-[#f1eff0]">0x8F9C4A2</code></span>
-            <span className="inline-flex items-center gap-1 text-[#cbf230] font-bold">
-              <CheckCircle2 className="w-3.5 h-3.5" /> QLOO READY
-            </span>
-          </div>
-        </div>
-      </aside>
 
       <CoordinateFooter market={brief.market} />
 

@@ -49,7 +49,7 @@ export function Header({
 
   return (
     <header
-      className={`fixed top-3 sm:top-4 left-0 right-0 z-50 px-4 sm:px-8 pointer-events-none transition-all duration-300 transform ${
+      className={`fixed top-6 sm:top-8 left-0 right-0 z-50 px-4 sm:px-8 pointer-events-none transition-all duration-300 transform ${
         isVisible ? "translate-y-0 opacity-100" : "-translate-y-24 opacity-0"
       }`}
     >
